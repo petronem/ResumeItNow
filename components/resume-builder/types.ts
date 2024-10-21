@@ -1,0 +1,45 @@
+export type FormValues = {
+    personalDetails: {
+      fullName: string;
+      email: string;
+      phone: string;
+      linkedin?: string;
+      github?: string;
+      location?: string;
+    };
+    objective?: string;
+    workExperience: {
+      jobTitle: string;
+      companyName: string;
+      location?: string;
+      startDate: string;
+      endDate?: string;
+      description?: string;
+    }[];
+    education: {
+      degree: string;
+      institution: string;
+      location?: string;
+      startDate: string;
+      endDate?: string;
+      grade?: string;
+    }[];
+    skills: {
+      skill: string;
+      proficiency?: 'Beginner' | 'Intermediate' | 'Advanced';
+    }[];
+    projects: {
+      projectName: string;
+      description: string;
+      link?: string;
+    }[];
+    languages: {
+      language: string;
+      proficiency?: 'Basic' | 'Fluent' | 'Native';
+    }[];
+    certifications: {
+      certificationName: string;
+      issuingOrganization: string;
+      issueDate: string;
+    }[];
+  };
