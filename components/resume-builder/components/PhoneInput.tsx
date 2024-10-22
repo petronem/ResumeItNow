@@ -15,7 +15,7 @@ export const PhoneInputComponent = ({ register, errors }: PhoneInputComponentPro
     const [phoneNumber, setPhoneNumber] = useState("");
   
     useEffect(() => {
-      const fullNumber = `${countryCode}${phoneNumber}`;
+      const fullNumber = `${countryCode} ${phoneNumber}`;
       register("personalDetails.phone").onChange({
         target: { value: fullNumber, name: "personalDetails.phone" }
       });

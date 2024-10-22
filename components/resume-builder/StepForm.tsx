@@ -6,17 +6,30 @@ import { useSession } from 'next-auth/react';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 import { FormValues } from './types';
 import { steps } from './schema';
 import { NavigationButtons } from './components/NavigationButtons';
 import { CareerObjectiveStep } from './form-steps/CareerObjectiveStep';
-import { PersonalInfoStep, WorkExperienceStep, EducationStep, SkillsStep, ProjectsStep, LanguagesStep, CertificationsStep} from './form-steps';
+import { 
+  PersonalInfoStep, 
+  WorkExperienceStep, 
+  EducationStep, 
+  SkillsStep, 
+  ProjectsStep, 
+  LanguagesStep, 
+  CertificationsStep
+} from './form-steps';
+import { useRouter } from 'next/navigation';
 
 export default function StepForm() {
   const { data: session } = useSession();
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
   
   const {
     register,
@@ -25,6 +38,7 @@ export default function StepForm() {
     control,
     watch,
     setValue,
+    getValues
   } = useForm<FormValues>({
     resolver: zodResolver(steps[step].schema),
     defaultValues: {
@@ -74,7 +88,7 @@ export default function StepForm() {
     }
   });
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (stepData: Partial<FormValues>) => {
     if (step < steps.length - 1) {
       setStep(step + 1);
       return;
@@ -90,17 +104,36 @@ export default function StepForm() {
       const resumeId = `resume_${new Date().getTime()}`;
       const docRef = doc(db, `users/${userId}/resumes/${resumeId}`);
 
+      // Get all form data
+      const completeFormData = getValues();
+      console.log(completeFormData);
+      
       await setDoc(docRef, {
-        ...data,
+        ...completeFormData, // Use complete form data instead of just step data
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
 
-      // Show success message or redirect
-      alert("Resume saved successfully!");
+      // Show success toast
+      toast({
+        title: "Success",
+        description: "Resume saved successfully!.. Redirecting to Resume",
+        duration: 3000,
+      });
+
+      setTimeout(() => {
+        router.push(`/resume/${resumeId}`);
+      }, 3000);
+
     } catch (error) {
       console.error("Error saving resume:", error);
-      alert(error instanceof Error ? error.message : "Error saving resume. Please try again.");
+      // Show error toast
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Error saving resume. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -207,6 +240,7 @@ export default function StepForm() {
           </form>
         </Card>
       </div>
+      <Toaster />
     </main>
   );
 }

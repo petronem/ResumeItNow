@@ -1,93 +1,126 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UseFormRegister } from "react-hook-form";
-import { format } from "date-fns";
 
 interface DatePickerComponentProps {
-    label: string;
-    end?: boolean;
-    register: UseFormRegister<any>;
-    schema?: string;
-  }
+  label: string;
+  end?: boolean;
+  register: UseFormRegister<any>;
+  schema?: string;
+}
 
-export const DatePickerComponent = ({ label, end, register, schema = 'personalDetails.startDate' }: DatePickerComponentProps) => {
-    const [monthYear, setMonthYear] = useState<string>(''); // Start with an empty string
-  
-    const handleMonthChange = (newMonth: string) => {
-      const monthIndex = parseInt(newMonth, 10);
-      const year = new Date().getFullYear(); // Use the current year
-      const newDate = new Date(year, monthIndex, 1);
-      const formattedValue = format(newDate, "MMM yyyy"); // Format as "MMM yyyy"
-      setMonthYear(formattedValue); // Store formatted value as string
-    };
-  
-    const handleYearChange = (newYear: string) => {
-      const year = parseInt(newYear, 10);
-      const month = new Date().getMonth(); // Use the current month
-      const newDate = new Date(year, month, 1);
-      const formattedValue = format(newDate, "MMM yyyy"); // Format as "MMM yyyy"
-      setMonthYear(formattedValue); // Store formatted value as string
-    };
-  
-    const handlePresent = () => {
-      setMonthYear('Present'); // Set the value to "Present"
-    };
-  
-    useEffect(() => {
-      // Register the field with react-hook-form
-      register(schema).onChange({
-        target: { value: monthYear, name: schema }
-      });
-    }, [monthYear, register, schema]);
-  
-    return (
-      <div className="space-y-2">
-        <Label>{label}</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full justify-start text-left font-normal">
-              {monthYear || 'Select Date'} {/* Display formatted value or placeholder */}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-4" align="start">
-            <div className="flex gap-4">
-              <Select onValueChange={handleMonthChange} defaultValue="">
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue>{monthYear ? monthYear.split(' ')[0] : 'Month'}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <SelectItem key={i} value={i.toString()}>
-                      {format(new Date(0, i), 'MMMM')}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select onValueChange={handleYearChange} defaultValue="">
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue>{monthYear ? monthYear.split(' ')[1] : 'Year'}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => (
-                    <SelectItem key={i} value={(1900 + i).toString()}>
-                      {1900 + i}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {end && (
-              <div className="mt-2">
-                <Button variant="outline" onClick={handlePresent} className="w-full">
-                  Present
-                </Button>
-              </div>
-            )}
-          </PopoverContent>
-        </Popover>
-      </div>
-    );
+export default function DatePickerComponent({
+  label,
+  end = false,
+  register,
+  schema = "personalDetails.startDate",
+}: DatePickerComponentProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [displayValue, setDisplayValue] = useState<string>("");
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  const months = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December"
+  ];
+
+  const handleSelect = (month: number) => {
+    const newDate = new Date(year, month);
+    setSelectedDate(newDate);
+    setDisplayValue(format(newDate, "MMMM yyyy"));
+    setIsOpen(false);
   };
+
+  const handlePresent = () => {
+    setSelectedDate(null);
+    setDisplayValue("Present");
+    setIsOpen(false);
+  };
+
+  const changeYear = (increment: number) => {
+    setYear(prev => prev + increment);
+  };
+
+  useEffect(() => {
+    register(schema).onChange({
+      target: { value: displayValue, name: schema }
+    });
+  }, [displayValue, register, schema]);
+
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !displayValue && "text-muted-foreground"
+            )}
+          >
+            <Calendar className="mr-2 h-4 w-4" />
+            {displayValue || "Pick a month"}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-0" align="start">
+          <div className="flex items-center justify-between border-b p-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-7 w-7 bg-transparent p-0 hover:bg-muted"
+              onClick={() => changeYear(-1)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="font-semibold">{year}</div>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-7 w-7 bg-transparent p-0 hover:bg-muted"
+              onClick={() => changeYear(1)}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="grid grid-cols-3 gap-2 p-2">
+            {months.map((month, index) => (
+              <Button
+                key={month}
+                variant="ghost"
+                className={cn(
+                  "h-9 w-full p-0",
+                  selectedDate &&
+                    selectedDate.getMonth() === index &&
+                    selectedDate.getFullYear() === year &&
+                    "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+                )}
+                onClick={() => handleSelect(index)}
+              >
+                {month.slice(0, 3)}
+              </Button>
+            ))}
+          </div>
+          {end && (
+            <div className="border-t p-2">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handlePresent}
+              >
+                Present
+              </Button>
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}

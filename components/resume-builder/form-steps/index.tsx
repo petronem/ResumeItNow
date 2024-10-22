@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DatePickerComponent } from '../components/DatePicker';
+import  DatePickerComponent  from '../components/DatePicker';
 import { PhoneInputComponent } from '../components/PhoneInput';
 
 // Type for the entire form values
@@ -158,18 +158,22 @@ export const WorkExperienceStep: React.FC<WorkExperienceStepProps> = ({
               <Input {...register(`workExperience.${index}.location`)} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DatePickerComponent
-                label="Start Date"
-                register={register}
-                schema={`workExperience.${index}.startDate`}
-              />
-              <DatePickerComponent
-                label="End Date"
-                register={register}
-                schema={`workExperience.${index}.endDate`}
-                end={true}
-              />
+            <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <DatePickerComponent
+                  label="Start Date"
+                  register={register}
+                  schema={`workExperience.${index}.startDate`}
+                  />
+                <DatePickerComponent
+                  label="End Date"
+                  register={register}
+                  schema={`workExperience.${index}.endDate`}
+                  end={true}
+                  />
+              </div>
+              {errors.workExperience?.[index]?.startDate && 
+                <p className="text-destructive text-sm">{errors.workExperience[index]?.startDate?.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -252,19 +256,23 @@ export const EducationStep: React.FC<EducationStepProps> = ({
               <Label>Location</Label>
               <Input {...register(`education.${index}.location`)} />
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DatePickerComponent
-                label="Start Date"
-                register={register}
-                schema={`education.${index}.startDate`}
-              />
-              <DatePickerComponent
-                label="End Date"
-                register={register}
-                schema={`education.${index}.endDate`}
-                end={true}
-              />
+            
+            <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <DatePickerComponent
+                  label="Start Date"
+                  register={register}
+                  schema={`education.${index}.startDate`}
+                  />
+                <DatePickerComponent
+                  label="End Date"
+                  register={register}
+                  schema={`education.${index}.endDate`}
+                  end={true}
+                  />
+              </div>
+              {errors.education?.[index]?.startDate && 
+                <p className="text-destructive text-sm">{errors.education[index]?.startDate?.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -561,12 +569,16 @@ export const LanguagesStep: React.FC<LanguagesStepProps> = ({
                                 {errors.certifications?.[index]?.issuingOrganization &&
                                     <p className="text-destructive text-sm">{errors.certifications[index]?.issuingOrganization?.message}</p>}
                             </div>
-    
-                            <DatePickerComponent
-                                label="Issue Date"
-                                register={register}
-                                schema={`certifications.${index}.issueDate`}
-                            />
+                            
+                            <div className="space-y-2">
+                              <DatePickerComponent
+                                  label="Issue Date"
+                                  register={register}
+                                  schema={`certifications.${index}.issueDate`}
+                                  />
+                              {errors.certifications?.[index]?.issueDate && 
+                                <p className="text-destructive text-sm">{errors.certifications[index]?.issueDate?.message}</p>}
+                            </div>
                         </div>
                     </Card>
                 ))}
