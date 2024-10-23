@@ -88,7 +88,7 @@ export default function StepForm() {
     }
   });
 
-  const onSubmit = async (stepData: Partial<FormValues>) => {
+  const onSubmit = async () => {
     if (step < steps.length - 1) {
       setStep(step + 1);
       return;
@@ -186,11 +186,11 @@ export default function StepForm() {
       case 2:
         return <WorkExperienceStep {...commonProps} fields={workExperienceFields} append={appendWorkExperience} remove={removeWorkExperience}/>;
       case 3:
-        return <EducationStep {...commonProps} fields={educationFields} append={appendEducation} remove={removeEducation}/>;
-      case 4:
-        return <SkillsStep {...commonProps} fields={skillsFields} append={appendSkill} remove={removeSkill}/>;
-      case 5:
         return <ProjectsStep {...commonProps} fields={projectFields} append={appendProject} remove={removeProject}/>;
+      case 4:
+        return <EducationStep {...commonProps} fields={educationFields} append={appendEducation} remove={removeEducation}/>;
+      case 5:
+        return <SkillsStep {...commonProps} fields={skillsFields} append={appendSkill} remove={removeSkill}/>;
       case 6:
         return <LanguagesStep {...commonProps} fields={languageFields} append={appendLanguage} remove={removeLanguage}/>;
       case 7:

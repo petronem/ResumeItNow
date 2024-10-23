@@ -19,7 +19,7 @@ export const PhoneInputComponent = ({ register, errors }: PhoneInputComponentPro
       register("personalDetails.phone").onChange({
         target: { value: fullNumber, name: "personalDetails.phone" }
       });
-    }, [countryCode, phoneNumber]);
+    }, [countryCode, phoneNumber, register]);
   
     return (
       <div className="space-y-2">

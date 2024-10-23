@@ -10,6 +10,7 @@ import { UseFormRegister } from "react-hook-form";
 interface DatePickerComponentProps {
   label: string;
   end?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;
   schema?: string;
 }
