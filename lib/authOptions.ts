@@ -13,7 +13,7 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({account, profile}) {
+    async signIn({profile}) {
       if(!profile?.email){
         throw new Error('No Profile!');
       }
