@@ -29,10 +29,10 @@ export async function POST(req: Request) {
         model: "meta-llama/llama-3.1-8b-instruct:free",
         messages: [{
           role: "system",
-          content: "You are a professional resume writer. Enhance the given description to be more impactful and professional while maintaining truthfulness. do not use markdown or any related markups."
+          content: "You are a professional resume writer. Enhance the given description to be more impactful and professional while maintaining truthfulness."
         }, {
           role: "user",
-          content: `Please enhance this description to be more professional and impactful: ${description}`
+          content: `Please enhance this description to be more professional and impactful: ${description} . important: do not use markdown or any related markups. dont use phrases like "here are..." or anything, just give the straight message. strictly under 450 characters.`
         }]
       })
     })
