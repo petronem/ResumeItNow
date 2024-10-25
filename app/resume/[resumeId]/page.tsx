@@ -33,8 +33,8 @@ interface Education {
 }
 
 interface Skill {
-  skill: string;
-  proficiency: string;
+  category: string;
+  skills: string;
 }
 
 interface Project {

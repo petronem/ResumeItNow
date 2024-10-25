@@ -35,8 +35,8 @@ export interface FormValues {
     grade?: string;
   }[];
   skills: {
-    skill: string;
-    proficiency?: 'Beginner' | 'Intermediate' | 'Advanced';
+    category: string;
+    skills: string;
   }[];
   projects: {
     projectName: string;
@@ -322,7 +322,7 @@ export const SkillsStep: React.FC<SkillsStepProps> = ({
       {fields.map((field, index) => (
         <Card key={field.id} className="p-6 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Skill {index + 1}</h3>
+            <h3 className="text-lg font-semibold">Skill Category {index + 1}</h3>
             <Button 
               type="button" 
               variant="destructive" 
@@ -333,32 +333,22 @@ export const SkillsStep: React.FC<SkillsStepProps> = ({
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Skill Name</Label>
-              <Input {...register(`skills.${index}.skill`)} />
-              {errors.skills?.[index]?.skill && 
-                <p className="text-destructive text-sm">{errors.skills[index]?.skill?.message}</p>}
+              <Label>Category Name</Label>
+              <Input {...register(`skills.${index}.category`)} />
+              {errors.skills?.[index]?.category && 
+                <p className="text-destructive text-sm">{errors.skills[index]?.category?.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label>Proficiency</Label>
-              <Select 
-                onValueChange={(value) => 
-                  register(`skills.${index}.proficiency`).onChange({
-                    target: { value }
-                  })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select proficiency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Beginner">Beginner</SelectItem>
-                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                  <SelectItem value="Advanced">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Skills (comma-separated)</Label>
+              <Input
+                placeholder="e.g. HTML, CSS, JavaScript"
+                className="min-h-[100px]"
+                {...register(`skills.${index}.skills`)}/>
+                {errors.skills?.[index]?.skills && 
+                <p className="text-destructive text-sm">{errors.skills[index]?.skills?.message}</p>}
             </div>
           </div>
         </Card>
@@ -367,9 +357,9 @@ export const SkillsStep: React.FC<SkillsStepProps> = ({
       <Button
         type="button"
         variant="outline"
-        onClick={() => append({ skill: "", proficiency: "Beginner" })}
+        onClick={() => append({ category: "", skills: "" })}
       >
-        Add Skill
+        Add Skill Category
       </Button>
     </div>
   );

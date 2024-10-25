@@ -2,7 +2,7 @@
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 pt-0">
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-5xl font-bold mb-8">ResumeIt</h1>
         <p className="text-2xl mb-12">Create professional, ATS-optimized resumes in minutes.</p>

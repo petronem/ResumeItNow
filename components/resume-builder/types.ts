@@ -25,8 +25,8 @@ export type FormValues = {
       grade?: string;
     }[];
     skills: {
-      skill: string;
-      proficiency?: 'Beginner' | 'Intermediate' | 'Advanced';
+      category: string;
+      skills: string;
     }[];
     projects: {
       projectName: string;

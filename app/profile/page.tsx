@@ -1,22 +1,22 @@
-// app/profile/page.tsx
 'use client'
-
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { db } from '@/lib/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { FileText, Mail, User } from 'lucide-react'
+import { FileText, Mail, User, Trash2 } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
+import { Toaster } from "@/components/ui/toaster";
 
 interface Resume {
   id: string
   title: string
   createdAt: string
-  // Add other resume fields as needed
+  updatedAt: string
 }
 
 function ProfileSkeleton() {
@@ -35,6 +35,30 @@ export default function Page() {
   const router = useRouter();
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
+  const { toast } = useToast();
+
+  const deleteResume = async (resumeId: string) => {
+    try {
+      await deleteDoc(doc(db, `users/${session?.user?.email}/resumes/${resumeId}`));
+      toast({
+        title: "Success",
+        description: "Resume deleted successfully!",
+        duration: 3000,
+      });
+      
+      // Remove the deleted resume from the list
+      setResumes((prevResumes) => prevResumes.filter((resume) => resume.id !== resumeId));
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Error deleting resume. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
+  };
+  
 
   useEffect(() => {
     const fetchResumes = async () => {
@@ -121,30 +145,43 @@ export default function Page() {
               </div>
             ) : (
               <div className="grid gap-4">
-                {resumes.map((resume) => (
-                  <Card
-                    key={resume.id}
-                    className="hover:bg-accent transition-colors cursor-pointer"
-                    onClick={() => router.push(`/resume/${resume.id}`)}
-                  >
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{resume.id}</CardTitle>
-                          <CardDescription>
-                            Created: {new Date(resume.createdAt).toLocaleDateString()}
-                          </CardDescription>
+                {resumes
+                  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                  .map((resume) => (
+                    <Card
+                      key={resume.id}
+                      className="hover:bg-accent transition-colors cursor-pointer"
+                    >
+                      <CardHeader>
+                        <div className="flex items-center justify-between" onClick={() => router.push(`/resume/${resume.id}`)}>
+                          <div className="cursor-pointer">
+                            <CardTitle className="text-lg">{resume.id}</CardTitle>
+                            <CardDescription>
+                              Created: {new Date(resume.createdAt).toLocaleDateString()}
+                            </CardDescription>
+                          </div>
+                          <div className="flex items-center">
+                            <FileText className="w-6 h-6 text-muted-foreground mr-2" />
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteResume(resume.id);
+                              }}
+                              className="text-red-500 hover:text-red-700 transition-colors"
+                            >
+                              <Trash2 />
+                            </button>
+                          </div>
                         </div>
-                        <FileText className="w-6 h-6 text-muted-foreground" />
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
+                      </CardHeader>
+                    </Card>
+                  ))}
               </div>
             )}
           </CardContent>
         </Card>
       </div>
+      <Toaster />
     </div>
   )
 }

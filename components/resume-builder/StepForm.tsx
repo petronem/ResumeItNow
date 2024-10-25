@@ -68,8 +68,8 @@ export default function StepForm() {
         grade: ""
       }],
       skills: [{
-        skill: "",
-        proficiency: "Beginner"
+        category: "",
+        skills: ""
       }],
       projects: [{
         projectName: "",

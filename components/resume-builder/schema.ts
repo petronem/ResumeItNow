@@ -37,10 +37,12 @@ export const careerObjectiveSchema = z.object({
   });
 
   export const skillsSchema = z.object({
-    skills: z.array(z.object({
-      skill: z.string().min(1, "Skill is required"),
-      proficiency: z.enum(["Beginner", "Intermediate", "Advanced"]).optional(),
-    }))
+    skills: z.array(
+      z.object({
+        category: z.string().min(1, "Category name is required"),
+        skills: z.string().min(1, "At least one skill is required"),
+      })
+    )
   });
 
   export const projectsSchema = z.object({
@@ -70,9 +72,9 @@ export const careerObjectiveSchema = z.object({
     { schema: personalInfoSchema, title: "Personal Info" },
     { schema: careerObjectiveSchema, title: "Career Objective" },
     { schema: workExperienceSchema, title: "Work Experience" },
+    { schema: projectsSchema, title: "Projects" },
     { schema: educationSchema, title: "Education" },
     { schema: skillsSchema, title: "Skills" },
-    { schema: projectsSchema, title: "Projects" },
     { schema: languagesSchema, title: "Languages" },
     { schema: certificationsSchema, title: "Certifications" },
   ];

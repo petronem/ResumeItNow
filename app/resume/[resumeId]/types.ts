@@ -26,8 +26,8 @@ export interface PersonalDetails {
   }
   
   export interface Skill {
-    skill: string;
-    proficiency: string;
+    category: string;
+    skills: string;
   }
   
   export interface Project {
