@@ -12,7 +12,7 @@ import { useLocalStorage } from '@/hooks/local-storage';
 export default function Navbar() {
     const { data: session } = useSession()
     const router = useRouter();
-    const { getSettings, isClient } = useLocalStorage();
+    const { getSettings } = useLocalStorage();
     const [settings, setSettings] = useState({
         displayName: session?.user?.name,
         defaultTemplate: 'modern'

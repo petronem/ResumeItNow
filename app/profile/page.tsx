@@ -37,7 +37,7 @@ export default function Page() {
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
   const { toast } = useToast();
-  const { getSettings, isClient } = useLocalStorage();
+  const { getSettings } = useLocalStorage();
   const [settings, setSettings] = useState({
     displayName: session?.user?.name,
     defaultTemplate: 'modern'
