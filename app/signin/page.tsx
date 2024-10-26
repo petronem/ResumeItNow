@@ -13,7 +13,7 @@ export default function SignIn() {
     if (session?.user?.email){
       router.push('/profile');
     }
-  }, [session])
+  }, [session, router])
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <Button onClick={() => signIn("google")}>Sign in with Google</Button>

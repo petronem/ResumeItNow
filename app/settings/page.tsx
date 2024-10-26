@@ -26,7 +26,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from 'next/navigation';
-import { toast, useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -76,7 +76,7 @@ export default function SettingsPage() {
     };
 
     loadSettings();
-  }, [session]);
+  }, [session, toast]);
 
   const saveSettings = async () => {
     if (!session?.user?.email) return;

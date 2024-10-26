@@ -11,7 +11,7 @@ export default function AboutPage() {
             Simple, Effective Resume Creation
           </h1>
           <p className="text-xl text-muted-foreground mb-12">
-            We've built a straightforward tool to help you create professional resumes 
+            We&apos;ve built a straightforward tool to help you create professional resumes 
             quickly and easily, enhanced with AI-powered content suggestions.
           </p>
 

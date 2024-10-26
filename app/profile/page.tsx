@@ -47,7 +47,7 @@ export default function Page() {
     if (localSettings) {
         setSettings(localSettings);
     }
-}, [session, isClient])
+}, [session, isClient, getSettings])
 
   const deleteResume = async (resumeId: string) => {
     try {
