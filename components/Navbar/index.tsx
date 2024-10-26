@@ -14,7 +14,7 @@ export default function Navbar() {
     const router = useRouter();
     const { getSettings, isClient } = useLocalStorage();
     const [settings, setSettings] = useState({
-        displayName: '',
+        displayName: session?.user?.name,
         defaultTemplate: 'modern'
       })
     useEffect(() => {
@@ -22,7 +22,7 @@ export default function Navbar() {
         if (localSettings) {
             setSettings(localSettings);
         }
-    }, [session, isClient, getSettings])
+    })
     return (
         <nav className="border-b">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -39,7 +39,7 @@ export default function Page() {
   const { toast } = useToast();
   const { getSettings, isClient } = useLocalStorage();
   const [settings, setSettings] = useState({
-    displayName: '',
+    displayName: session?.user?.name,
     defaultTemplate: 'modern'
   })
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Page() {
     if (localSettings) {
         setSettings(localSettings);
     }
-}, [session, isClient, getSettings])
+})
 
   const deleteResume = async (resumeId: string) => {
     try {
