@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { FileText, Mail, User, Trash2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { Toaster } from "@/components/ui/toaster";
+import { useLocalStorage } from '@/hooks/local-storage'
 
 interface Resume {
   id: string
@@ -36,6 +37,17 @@ export default function Page() {
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
   const { toast } = useToast();
+  const { getSettings, isClient } = useLocalStorage();
+  const [settings, setSettings] = useState({
+    displayName: '',
+    defaultTemplate: 'modern'
+  })
+  useEffect(() => {
+    const localSettings = getSettings();
+    if (localSettings) {
+        setSettings(localSettings);
+    }
+}, [session, isClient])
 
   const deleteResume = async (resumeId: string) => {
     try {
@@ -94,7 +106,7 @@ export default function Page() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container min-h-screen mx-auto px-4 py-8">
       <div className="grid gap-8 md:grid-cols-[300px_1fr]">
         {/* Profile Information Card */}
         <Card className="h-fit">
@@ -105,7 +117,7 @@ export default function Page() {
                 {session.user?.name?.charAt(0) ?? 'U'}
               </AvatarFallback>
             </Avatar>
-            <CardTitle>{session.user?.name}</CardTitle>
+            <CardTitle>{(settings.displayName !== '' ? settings.displayName : session.user?.name)}</CardTitle>
             <CardDescription>
               <div className="flex items-center justify-center gap-2">
                 <User className="w-4 h-4" />

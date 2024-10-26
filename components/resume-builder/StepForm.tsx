@@ -214,7 +214,7 @@ export default function StepForm() {
       <div className="max-w-3xl mx-auto">
         {/* Progress bar */}
         <div className="mb-8">
-          <div className="h-2 w-full bg-gray-200 rounded-full">
+          <div className="h-2 w-full bg-gray-200 dark:bg-border rounded-full">
             <div 
               className="h-full bg-primary rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}

@@ -5,12 +5,24 @@ import ThemeSwitch from '../ThemeSwitch';
 import { useSession, signOut } from 'next-auth/react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useLocalStorage } from '@/hooks/local-storage';
 
 
 export default function Navbar() {
     const { data: session } = useSession()
     const router = useRouter();
-
+    const { getSettings, isClient } = useLocalStorage();
+    const [settings, setSettings] = useState({
+        displayName: '',
+        defaultTemplate: 'modern'
+      })
+    useEffect(() => {
+        const localSettings = getSettings();
+        if (localSettings) {
+            setSettings(localSettings);
+        }
+    }, [session, isClient])
     return (
         <nav className="border-b">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -18,7 +30,7 @@ export default function Navbar() {
                     <div className="flex">
                         <div className="flex flex-shrink-0 items-center">
                             <Link href="/" className="font-bold text-2xl">
-                                ResumeIt
+                                ResumeItNow
                             </Link>
                         </div>
                     </div>
@@ -31,7 +43,7 @@ export default function Navbar() {
                         {session ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline">{session.user?.name}</Button>
+                                    <Button variant="outline">{(settings.displayName !== '' ? settings.displayName : session.user?.name)}</Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='w-56'>
                                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -46,7 +58,7 @@ export default function Navbar() {
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
-                                        <DropdownMenuItem className='text-red-400 cursor-pointer' onClick={()=>signOut()}>
+                                        <DropdownMenuItem className='text-red-400 cursor-pointer' onClick={()=>{ localStorage.clear(); signOut({redirect: false}); router.push('/')} }>
                                             Logout
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>

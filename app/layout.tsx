@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import { ThemeWrapper } from '@/components/ThemeWrapper';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '@/components/SessionProvider';
+import { Footer } from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
           <ThemeWrapper>
             <Navbar />
             {children}
+            <Footer />
           </ThemeWrapper>
         </SessionProvider>
       </body>
