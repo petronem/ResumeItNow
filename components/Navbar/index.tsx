@@ -1,28 +1,18 @@
-'use client'
+"use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import ThemeSwitch from '../ThemeSwitch';
 import { useSession, signOut } from 'next-auth/react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useLocalStorage } from '@/hooks/local-storage';
-
 
 export default function Navbar() {
     const { data: session } = useSession()
     const router = useRouter();
-    const { getSettings } = useLocalStorage();
-    const [settings, setSettings] = useState({
-        displayName: session?.user?.name,
-        defaultTemplate: 'modern'
-      })
-    useEffect(() => {
-        const localSettings = getSettings();
-        if (localSettings) {
-            setSettings(localSettings);
-        }
-    })
+    const settings = {
+        displayName: window.localStorage.getItem("resumeitnow_name") || session?.user?.name,
+        defaultTemplate: window.localStorage.getItem("resumeitnow_template") || 'modern'
+      }
     return (
         <nav className="border-b">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

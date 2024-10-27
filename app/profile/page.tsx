@@ -11,7 +11,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { FileText, Mail, User, Trash2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { Toaster } from "@/components/ui/toaster";
-import { useLocalStorage } from '@/hooks/local-storage'
 
 interface Resume {
   id: string
@@ -37,17 +36,10 @@ export default function Page() {
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
   const { toast } = useToast();
-  const { getSettings } = useLocalStorage();
-  const [settings, setSettings] = useState({
-    displayName: session?.user?.name,
-    defaultTemplate: 'modern'
-  })
-  useEffect(() => {
-    const localSettings = getSettings();
-    if (localSettings) {
-        setSettings(localSettings);
-    }
-})
+  const settings = {
+    displayName: window.localStorage.getItem("resumeitnow_name") || session?.user?.name,
+    defaultTemplate: window.localStorage.getItem("resumeitnow_template") || 'modern'
+  }
 
   const deleteResume = async (resumeId: string) => {
     try {

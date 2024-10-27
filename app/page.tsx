@@ -1,10 +1,11 @@
 // app/page.tsx
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, FileText, Sparkles, Download } from "lucide-react"
 import { db } from "@/lib/firebase"
 import { doc, getDoc } from "firebase/firestore"
+import Link from "next/link"
 
 async function getResumesCreated() {
   try {
@@ -35,9 +36,9 @@ export default async function HomePage() {
           Choose from professional templates and download in PDF format.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg" className="gap-2">
+          <Link href={"/resume/create"} className={buttonVariants({ variant: "outline" })}>
             Create Resume <ArrowRight className="h-4 w-4" />
-          </Button>
+          </Link>
           <Button size="lg" variant="outline">
             View Templates
           </Button>

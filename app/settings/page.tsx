@@ -52,12 +52,13 @@ export default function SettingsPage() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setSettings({
-            displayName: data.displayName || session.user.name || '',
+            displayName: data.displayName,
             defaultTemplate: data.defaultTemplate || 'modern'
           });
           
           // Also set to localStorage as backup
-          localStorage.setItem('userSettings', JSON.stringify(data));
+          localStorage.setItem('resumeitnow_name', data.displayName);
+          localStorage.setItem('resumeitnow_template', data.defaultTemplate);
         } else {
           // If no settings exist, use session name as default
           setSettings(prev => ({
@@ -76,7 +77,7 @@ export default function SettingsPage() {
     };
 
     loadSettings();
-  }, [session, toast]);
+  });
 
   const saveSettings = async () => {
     if (!session?.user?.email) return;
@@ -87,7 +88,8 @@ export default function SettingsPage() {
       await setDoc(doc(db, 'users', session.user.email, 'settings', 'preferences'), settings);
       
       // Update localStorage
-      localStorage.setItem('userSettings', JSON.stringify(settings));
+      localStorage.setItem('resumeitnow_name', settings.displayName);
+      localStorage.setItem('resumeitnow_template', settings.defaultTemplate);
       
       // Update NextAuth session with new name
       await updateSession({
