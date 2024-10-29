@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { Input } from '@/components/ui/input';
 import type { TemplateProps } from './types';
 import { Textarea } from '@/components/ui/textarea';
@@ -81,75 +80,6 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
         aria-label={ariaLabel}
       />
     );
-  };
-
-  const renderPersonalDetails = () => {
-    const { personalDetails } = resumeData;
-    const details = [
-      {
-        key: 'email',
-        value: personalDetails.email,
-        onChange: (value: string) => updateField('personalDetails', null, 'email', value),
-        ariaLabel: "Email address"
-      },
-      {
-        key: 'phone',
-        value: personalDetails.phone,
-        onChange: (value: string) => updateField('personalDetails', null, 'phone', value),
-        ariaLabel: "Phone number"
-      },
-      {
-        key: 'location',
-        value: personalDetails.location,
-        onChange: (value: string) => updateField('personalDetails', null, 'location', value),
-        ariaLabel: "Location"
-      }
-    ].filter(detail => detail.value);
-
-    return details.map((detail, index) => (
-      <Fragment key={detail.key}>
-        <div className="inline-flex items-center gap-1 mx-2">
-          {renderInput({
-            value: detail.value,
-            onChange: detail.onChange,
-            className: "inline-block",
-            ariaLabel: detail.ariaLabel
-          })}
-        </div>
-      </Fragment>
-    ));
-  };
-
-  const renderLinks = () => {
-    const { personalDetails } = resumeData;
-    const links = [
-      {
-        key: 'linkedin',
-        value: personalDetails.linkedin,
-        onChange: (value: string) => updateField('personalDetails', null, 'linkedin', value),
-        ariaLabel: "LinkedIn profile"
-      },
-      {
-        key: 'github',
-        value: personalDetails.github,
-        onChange: (value: string) => updateField('personalDetails', null, 'github', value),
-        ariaLabel: "GitHub profile"
-      }
-    ].filter(link => link.value);
-
-    return links.map((link) => (
-      <Fragment key={link.key}>
-        <div className="inline-flex items-center gap-1 mx-2">
-          {renderInput({
-            value: link.value,
-            onChange: link.onChange,
-            className: "text-blue-600 hover:underline inline-block text-sm",
-            link: true,
-            ariaLabel: link.ariaLabel
-          })}
-        </div>
-      </Fragment>
-    ));
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
