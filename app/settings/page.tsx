@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; // Assuming you have firebase config
+import { db } from '@/lib/firebase';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,7 @@ export default function SettingsPage() {
     };
 
     loadSettings();
-  });
+  }, [session?.user?.email, session?.user?.name, toast]); // Add dependencies here
 
   const saveSettings = async () => {
     if (!session?.user?.email) return;
@@ -178,7 +178,14 @@ export default function SettingsPage() {
                 />
               </div>
               <Button onClick={saveSettings} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Changes'}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Changes'
+                )}
               </Button>
             </CardContent>
           </Card>
@@ -211,52 +218,52 @@ export default function SettingsPage() {
           </Card>
 
           <Card className="border-destructive">
-          <CardHeader>
-            <CardTitle className="text-destructive">Danger Zone</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={isDeleting}>
-                  {isDeleting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    "Delete Account"
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your
-                    account and remove all of your data from our servers, including:
-                    <ul className="list-disc list-inside mt-2 space-y-1">
-                      <li>All your saved resumes</li>
-                      <li>Personal information</li>
-                      <li>Settings and preferences</li>
-                    </ul>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleAccountDelete}
-                    className="bg-destructive hover:bg-destructive/90"
-                  >
-                    Delete Account
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <p className="text-sm text-muted-foreground mt-4">
-              Once you delete your account, there is no going back. Please be certain.
-            </p>
-          </CardContent>
-        </Card>
+            <CardHeader>
+              <CardTitle className="text-destructive">Danger Zone</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" disabled={isDeleting}>
+                    {isDeleting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Deleting...
+                      </>
+                    ) : (
+                      "Delete Account"
+                    )}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete your
+                      account and remove all of your data from our servers, including:
+                      <ul className="list-disc list-inside mt-2 space-y-1">
+                        <li>All your saved resumes</li>
+                        <li>Personal information</li>
+                        <li>Settings and preferences</li>
+                      </ul>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleAccountDelete}
+                      className="bg-destructive hover:bg-destructive/90"
+                    >
+                      Delete Account
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <p className="text-sm text-muted-foreground mt-4">
+                Once you delete your account, there is no going back. Please be certain.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>

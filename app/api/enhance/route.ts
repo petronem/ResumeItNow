@@ -32,7 +32,7 @@ export async function POST(req: Request) {
           content: "You are a professional resume writer. Enhance the given description to be more impactful and professional while maintaining truthfulness."
         }, {
           role: "user",
-          content: `Please enhance this description to be more professional and impactful: ${description} . important: do not use markdown or any related markups. dont use phrases like "here are..." or anything, just give the straight message. strictly under 450 characters.`
+          content: `Please enhance this description to be more professional and impactful: ${description} . important: only use bold(**) and bullet point(-) markdown and dont use phrases like "here are..." or anything, just give the straight message. strictly under 450 characters.`
         }]
       })
     })

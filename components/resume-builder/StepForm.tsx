@@ -43,7 +43,7 @@ export default function StepForm() {
     resolver: zodResolver(steps[step].schema),
     defaultValues: {
       personalDetails: {
-        fullName: session?.user?.name || "",
+        fullName: localStorage.getItem("resumeitnow_name") || session?.user?.name || "",
         email: session?.user?.email || "",
         phone: "",
         linkedin: "",

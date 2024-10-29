@@ -35,7 +35,7 @@ export default function ResumeBuilderPage() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen">
       <StepForm />
     </div>
   );
