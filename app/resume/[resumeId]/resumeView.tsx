@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Download, Edit, Save, X } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import html2pdf from 'html2pdf.js';
 import type { ResumeData } from './types';
 import { useSession } from 'next-auth/react';
 import { ModernTemplate } from '@/components/resume/templates/Modern';
@@ -51,17 +50,18 @@ export default function ResumeView({
     }
   }, []);
 
-  const handleDownload = () => {
-    const element = document.getElementById('resume-content');
-    const opt = {
-      margin: [0.2, 0.295, 0.3, 0.295],
-      filename: `${resumeData.personalDetails.fullName.replace(/\s+/g, '_')}_resume.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    
-    html2pdf().set(opt).from(element).save();
+  const handleDownload = async () => {
+    const originalContent = document.body.innerHTML;
+    const resumeContent = document.getElementById('resume-content')?.innerHTML;
+  
+    if (resumeContent) {
+      // Set body content to only the resume for printing
+      document.body.innerHTML = resumeContent;
+      window.print();
+      // Restore original page content after printing
+      document.body.innerHTML = originalContent;
+      window.location.reload(); // Reload to reattach scripts/styles if necessary
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
