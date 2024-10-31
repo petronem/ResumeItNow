@@ -20,6 +20,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+import html2pdf from 'html2pdf.js';
 
 // Template components mapping
 const TEMPLATES = {
@@ -51,16 +52,36 @@ export default function ResumeView({
   }, []);
 
   const handleDownload = async () => {
-    const originalContent = document.body.innerHTML;
-    const resumeContent = document.getElementById('resume-content')?.innerHTML;
+    const element = document.getElementById('resume-content');
+    
+    if (!element) {
+      console.error('Resume content element not found');
+      return;
+    }
   
-    if (resumeContent) {
-      // Set body content to only the resume for printing
-      document.body.innerHTML = resumeContent;
-      window.print();
-      // Restore original page content after printing
-      document.body.innerHTML = originalContent;
-      window.location.reload(); // Reload to reattach scripts/styles if necessary
+    const opt = {
+      margin: 0,
+      filename: `${resumeData.personalDetails.fullName || 'resume'}_${new Date().toISOString().split('T')[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { 
+        useCORS: true,  // Handles cross-origin images
+        logging: false  // Reduces console logging
+      },
+      jsPDF:{ 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait' 
+      },
+      pagebreak: { mode: 'avoid-all' }
+    };
+  
+    try {
+      // Generate and save PDF
+      await html2pdf().set(opt).from(element).save();
+
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('Failed to download PDF. Please try again.');
     }
   };
 
@@ -225,6 +246,38 @@ export default function ResumeView({
           updateField={updateField}
         />
       </div>
+       {/* Print Styles */}
+       <style jsx global>{`
+        @media print {
+          @page {
+            margin: 0.5cm;
+            size: A4;
+          }
+          
+          body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          
+          .shadow-lg {
+            box-shadow: none !important;
+          }
+          
+          a {
+            text-decoration: none !important;
+          }
+          
+          input, textarea {
+            border: none !important;
+            padding: 0 !important;
+            background: transparent !important;
+          }
+          
+          .text-blue-600 {
+            color: #2563eb !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

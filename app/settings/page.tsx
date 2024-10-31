@@ -214,6 +214,16 @@ export default function SettingsPage() {
                   </SelectContent>
                 </Select>
               </div>
+              <Button onClick={saveSettings} disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Changes'
+                )}
+              </Button>
             </CardContent>
           </Card>
 

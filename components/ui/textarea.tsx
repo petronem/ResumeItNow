@@ -161,6 +161,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         </div>
 
         <Tabs defaultValue="edit" onValueChange={setCurrentTab}>
+          <div className="flex justify-between">
+
           <TabsList className="mb-2">
             <TabsTrigger value="edit" className="flex items-center gap-1">
               <Edit className="h-4 w-4" />
@@ -171,6 +173,26 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               Preview
             </TabsTrigger>
           </TabsList>
+          {showEnhanceButton && (
+            <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="bg-purple-400 hover:bg-purple-500 transition hover:scale-105"
+            onClick={handleEnhance}
+            disabled={isEnhancing}
+            >
+                {isEnhancing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Enhancing...
+                  </>
+                ) : (
+                  "Enhance with AI"
+                )}
+              </Button>
+            )}
+          </div>
 
           <TabsContent value="edit" className="relative">
             <textarea
@@ -191,25 +213,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               value={currentText}
               onChange={handleTextChange}
             />
-            {showEnhanceButton && (
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="absolute right-6 bottom-2 bg-purple-400 hover:bg-purple-500 transition hover:scale-105"
-                onClick={handleEnhance}
-                disabled={isEnhancing}
-              >
-                {isEnhancing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Enhancing...
-                  </>
-                ) : (
-                  "Enhance with AI"
-                )}
-              </Button>
-            )}
           </TabsContent>
 
           <TabsContent value="preview">

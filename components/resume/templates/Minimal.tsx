@@ -15,7 +15,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
         
         // Convert bullet points
         if (line.trim().startsWith('- ')) {
-          line = `<li>${line.substring(2)}</li>`;
+          line = `<br/>• ${line.substring(2)}`;
         }
         return line;
       })
@@ -411,39 +411,6 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
           </div>
         </div>
       )}
-
-      {/* Print Styles */}
-      <style jsx global>{`
-        @media print {
-          @page {
-            margin: 0.5cm;
-            size: A4;
-          }
-          
-          body {
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
-          
-          .shadow-lg {
-            box-shadow: none !important;
-          }
-          
-          a {
-            text-decoration: none !important;
-          }
-          
-          input, textarea {
-            border: none !important;
-            padding: 0 !important;
-            background: transparent !important;
-          }
-          
-          .text-blue-600 {
-            color: #2563eb !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
