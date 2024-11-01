@@ -60,7 +60,7 @@ export default function ResumeView({
     }
   
     const opt = {
-      margin: [10, 5],
+      margin: [5.2, 4.5, 5.5, 4.5],
       filename: `${resumeData.personalDetails.fullName || 'resume'}_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas:  { 
