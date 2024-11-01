@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, increment, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +13,7 @@ import { FormValues } from './types';
 import { steps } from './schema';
 import { NavigationButtons } from './components/NavigationButtons';
 import { CareerObjectiveStep } from './form-steps/CareerObjectiveStep';
+import { JobTitleStep } from './form-steps/JobTitleStep';
 import { 
   PersonalInfoStep, 
   WorkExperienceStep, 
@@ -51,6 +52,7 @@ export default function StepForm() {
         location: ""
       },
       objective: "",
+      jobTitle: "",
       workExperience: [{
         jobTitle: "",
         companyName: "",
@@ -103,6 +105,11 @@ export default function StepForm() {
       
       const resumeId = `resume_${new Date().getTime()}`;
       const docRef = doc(db, `users/${userId}/resumes/${resumeId}`);
+
+      const countRef = doc(db, "info", "resumesCreated");
+      await updateDoc(countRef, {
+        count: increment(1)
+      });
 
       // Get all form data
       const completeFormData = getValues();
@@ -184,16 +191,18 @@ export default function StepForm() {
       case 1:
         return <CareerObjectiveStep {...commonProps} />;
       case 2:
-        return <WorkExperienceStep {...commonProps} fields={workExperienceFields} append={appendWorkExperience} remove={removeWorkExperience}/>;
+        return <JobTitleStep {...commonProps} />;
       case 3:
-        return <ProjectsStep {...commonProps} fields={projectFields} append={appendProject} remove={removeProject}/>;
+        return <WorkExperienceStep {...commonProps} fields={workExperienceFields} append={appendWorkExperience} remove={removeWorkExperience}/>;
       case 4:
-        return <EducationStep {...commonProps} fields={educationFields} append={appendEducation} remove={removeEducation}/>;
+        return <ProjectsStep {...commonProps} fields={projectFields} append={appendProject} remove={removeProject}/>;
       case 5:
-        return <SkillsStep {...commonProps} fields={skillsFields} append={appendSkill} remove={removeSkill}/>;
+        return <EducationStep {...commonProps} fields={educationFields} append={appendEducation} remove={removeEducation}/>;
       case 6:
-        return <LanguagesStep {...commonProps} fields={languageFields} append={appendLanguage} remove={removeLanguage}/>;
+        return <SkillsStep {...commonProps} fields={skillsFields} append={appendSkill} remove={removeSkill}/>;
       case 7:
+        return <LanguagesStep {...commonProps} fields={languageFields} append={appendLanguage} remove={removeLanguage}/>;
+      case 8:
         return <CertificationsStep {...commonProps} fields={certificationFields} append={appendCertification} remove={removeCertification}/>;
       default:
         return null;

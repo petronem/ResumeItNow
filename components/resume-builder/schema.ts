@@ -14,6 +14,10 @@ export const careerObjectiveSchema = z.object({
     objective: z.string().max(500, "Objective must be less than 500 characters").optional(),
   });
 
+export const jobTitleSchema = z.object({
+    jobTitle: z.string().max(200, "Job Title must be less than 200 characters").optional(),
+  });
+
   export const workExperienceSchema = z.object({
     workExperience: z.array(z.object({
       jobTitle: z.string().min(1, "Job Title is required"),
@@ -71,6 +75,7 @@ export const careerObjectiveSchema = z.object({
   export const steps = [
     { schema: personalInfoSchema, title: "Personal Info" },
     { schema: careerObjectiveSchema, title: "Career Objective" },
+    { schema: jobTitleSchema, title: "Job Title" },
     { schema: workExperienceSchema, title: "Work Experience" },
     { schema: projectsSchema, title: "Projects" },
     { schema: educationSchema, title: "Education" },

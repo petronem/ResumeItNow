@@ -50,6 +50,7 @@ export interface PersonalDetails {
   export interface ResumeData {
     personalDetails: PersonalDetails;
     objective: string;
+    jobTitle: string;
     workExperience: WorkExperience[];
     education: Education[];
     skills: Skill[];

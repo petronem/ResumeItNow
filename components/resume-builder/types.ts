@@ -8,6 +8,7 @@ export type FormValues = {
       location?: string;
     };
     objective?: string;
+    jobTitle?: string;
     workExperience: {
       jobTitle: string;
       companyName: string;

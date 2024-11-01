@@ -21,6 +21,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import html2pdf from 'html2pdf.js';
+import { before } from 'node:test';
 
 // Template components mapping
 const TEMPLATES = {
@@ -60,7 +61,7 @@ export default function ResumeView({
     }
   
     const opt = {
-      margin: 0,
+      margin: [10, 5],
       filename: `${resumeData.personalDetails.fullName || 'resume'}_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas:  { 
@@ -72,7 +73,7 @@ export default function ResumeView({
         format: 'a4', 
         orientation: 'portrait' 
       },
-      pagebreak: { mode: 'avoid-all' }
+      pagebreak: { mode: 'legacy' }
     };
   
     try {
