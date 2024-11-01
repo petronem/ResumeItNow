@@ -82,12 +82,6 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
     );
   };
 
-  const SectionHeader = ({ title }: { title: string }) => (
-    <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-      <h2>{title}</h2>
-    </div>
-  );
-
   const hasContent = (section: unknown): boolean => {
     if (!section) return false;
     if (Array.isArray(section)) return section.length > 0;
@@ -100,20 +94,31 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
   };
 
   return (
-    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 print:shadow-none">
+    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 pt-0 print:shadow-none">
       {/* Personal Details Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-3">
-          {renderInput({
-            value: resumeData.personalDetails.fullName,
-            onChange: (value) => updateField('personalDetails', null, 'fullName', value),
-            className: "text-center",
-            ariaLabel: "Full name"
-          })}
-        </h1>
-        <div className="text-center text-gray-600 text-sm">
+        <div className="flex justify-between w-full">
+          <div className="flex flex-col">
+            <h1 className="text-4xl font-bold text-gray-800 text-center mb-3">
+              {renderInput({
+                value: resumeData.personalDetails.fullName,
+                onChange: (value) => updateField('personalDetails', null, 'fullName', value),
+                className: "text-left",
+                ariaLabel: "Full name"
+              })}
+            </h1>
+            <p>
+            {renderInput({
+                value: resumeData.jobTitle,
+                onChange: (value) => updateField('jobTitle',null, 'jobTitle', value),
+                className: "text-left text-black",
+                ariaLabel: "Job Title"
+              })}
+            </p>
+          </div>
+          <div className="text-right text-gray-600 text-sm flex flex-col">
           {resumeData.personalDetails.email && (
-            <div className="inline-flex items-center gap-1 mx-2">
+            <div className="items-center gap-1 mx-2">
               {renderInput({
                 value: resumeData.personalDetails.email,
                 onChange: (value) => updateField('personalDetails', null, 'email', value),
@@ -123,7 +128,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             </div>
           )}
           {resumeData.personalDetails.phone && (
-            <div className="inline-flex items-center gap-1 mx-2">
+            <div className="items-center gap-1 mx-2">
               {renderInput({
                 value: resumeData.personalDetails.phone,
                 onChange: (value) => updateField('personalDetails', null, 'phone', value),
@@ -133,7 +138,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             </div>
           )}
           {resumeData.personalDetails.location && (
-            <div className="inline-flex items-center gap-1 mx-2">
+            <div className="items-center gap-1 mx-2">
               {renderInput({
                 value: resumeData.personalDetails.location,
                 onChange: (value) => updateField('personalDetails', null, 'location', value),
@@ -142,10 +147,8 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
               })}
             </div>
           )}
-        </div>
-        <div className="text-center mt-2">
           {resumeData.personalDetails.linkedin && (
-            <div className="inline-flex items-center gap-1 mx-2">
+            <div className="items-center gap-1 mx-2">
               {renderInput({
                 value: resumeData.personalDetails.linkedin,
                 onChange: (value) => updateField('personalDetails', null, 'linkedin', value),
@@ -156,7 +159,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             </div>
           )}
           {resumeData.personalDetails.github && (
-            <div className="inline-flex items-center gap-1 mx-2">
+            <div className="items-center gap-1 mx-2">
               {renderInput({
                 value: resumeData.personalDetails.github,
                 onChange: (value) => updateField('personalDetails', null, 'github', value),
@@ -167,13 +170,14 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             </div>
           )}
         </div>
+        </div>
       </div>
 
       {/* Professional Summary */}
       {hasContent(resumeData.objective) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Professional Summary</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Professional Summary</h2>
           </div>
           {renderInput({
             value: resumeData.objective,
@@ -188,8 +192,8 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Work Experience Section */}
       {hasContent(resumeData.workExperience) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Work Experience</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Work Experience</h2>
           </div>
           {resumeData.workExperience.map((experience, index) => (
             <div key={index} className="mb-4 last:mb-0">
@@ -202,7 +206,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                     ariaLabel: "Job title"
                   })}
                 </div>
-                <div className="text-gray-600 text-sm flex items-center gap-1">
+                <div className="text-black italic text-sm flex items-center gap-1">
                   {renderInput({
                     value: experience.startDate,
                     onChange: (value) => updateField('workExperience', index, 'startDate', value),
@@ -220,7 +224,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                 {renderInput({
                   value: experience.companyName,
                   onChange: (value) => updateField('workExperience', index, 'companyName', value),
-                  className: "text-gray-700 font-medium text-sm mb-1",
+                  className: "text-black font-medium text-sm mb-1",
                   ariaLabel: "Company name"
                 })}
                 {renderInput({
@@ -239,16 +243,16 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Projects Section */}
       {hasContent(resumeData.projects) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Projects</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Projects</h2>
           </div>
           {resumeData.projects.map((project, index) => (
             <div key={index} className="mb-4 last:mb-0">
-              <div className="flex flex-col items-start mb-1">
+              <div className="flex items-center justify-between mb-1">
                 {renderInput({
                   value: project.projectName,
                   onChange: (value) => updateField('projects', index, 'projectName', value),
-                  className: "font-semibold text-gray-800",
+                  className: "font-semibold text-black",
                   ariaLabel: "Project name"
                 })}
                 {project.link && renderInput({
@@ -274,8 +278,8 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Education Section */}
       {hasContent(resumeData.education) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Education</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Education</h2>
           </div>
           {resumeData.education.map((edu, index) => (
             <div key={index} className="mb-4 last:mb-0">
@@ -286,7 +290,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                   className: "font-semibold text-gray-800",
                   ariaLabel: "Degree"
                 })}
-                <div className="text-gray-600 text-sm flex items-center gap-1">
+                <div className="text-black italic text-sm flex items-center gap-1">
                   {renderInput({
                     value: edu.startDate,
                     onChange: (value) => updateField('education', index, 'startDate', value),
@@ -303,7 +307,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
               {renderInput({
                 value: edu.institution,
                 onChange: (value) => updateField('education', index, 'institution', value),
-                className: "text-gray-700 font-medium text-sm",
+                className: "text-black font-medium text-sm",
                 ariaLabel: "Institution"
               })}
               {edu.grade && (
@@ -324,8 +328,8 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Skills Section */}
       {hasContent(resumeData.skills) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Technical Skills</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Technical Skills</h2>
           </div>
           <div className="space-y-2">
             {resumeData.skills.map((categoryGroup, index) => (
@@ -333,7 +337,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                 {renderInput({
                   value: categoryGroup.category,
                   onChange: (value) => updateField('skills', index, 'category', value),
-                  className: "text-gray-800 text-sm font-semibold",
+                  className: "text-black text-sm font-semibold",
                   ariaLabel: "Skill category"
                 })}
                 <span className="text-gray-800 text-sm font-semibold mx-2">:</span>
@@ -352,8 +356,8 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Certifications Section */}
       {hasContent(resumeData.certifications) && (
         <div className="mb-6 text-black">
-          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
-            <h2>Certifications</h2>
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Certifications</h2>
           </div>
           {resumeData.certifications.map((cert, index) => (
             <div key={index} className="mb-3 last:mb-0">
@@ -368,7 +372,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                   {renderInput({
                     value: cert.issueDate,
                     onChange: (value) => updateField('certifications', index, 'issueDate', value),
-                    className: "text-gray-600 text-sm",
+                    className: "text-gray-600 italic text-sm",
                     ariaLabel: "Certification date"
                   })}
                 </div>
@@ -389,10 +393,12 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
       {/* Languages Section */}
       {hasContent(resumeData.languages) && (
         <div className="mb-6 text-black">
-          <SectionHeader title="Languages" />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black pb-1">
+            <h2 className='text-center w-full'>Languages</h2>
+          </div>
+          <div className="flex flex-col space-y-2">
             {resumeData.languages.map((language, index) => (
-              <div key={index} className="text-sm flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+              <div key={index} className="text-sm flex items-center gap-2 p-2 rounded-md">
                 {renderInput({
                   value: language.language,
                   onChange: (value) => updateField('languages', index, 'language', value),

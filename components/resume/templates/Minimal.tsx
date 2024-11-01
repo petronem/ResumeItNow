@@ -100,10 +100,10 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
   };
 
   return (
-    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 print:shadow-none">
+    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 pt-0 print:shadow-none">
       {/* Personal Details Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-3">
+        <h1 className="text-3xl font-bold text-gray-800 text-center">
           {renderInput({
             value: resumeData.personalDetails.fullName,
             onChange: (value) => updateField('personalDetails', null, 'fullName', value),
@@ -111,6 +111,14 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
             ariaLabel: "Full name"
           })}
         </h1>
+        <p className='mb-3'>
+        {renderInput({
+            value: resumeData.jobTitle,
+            onChange: (value) => updateField('jobTitle',null, 'jobTitle', value),
+            className: "text-center",
+            ariaLabel: "Job Title"
+          })}
+        </p>
         <div className="text-center text-gray-600 text-sm">
           {resumeData.personalDetails.email && (
             <div className="inline-flex items-center gap-1 mx-2">

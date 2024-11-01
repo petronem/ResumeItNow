@@ -94,17 +94,27 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
   };
 
   return (
-    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 print:shadow-none">
+    <div className="max-w-[21cm] mx-auto bg-white shadow-lg p-8 pt-0 print:shadow-none">
       {/* Personal Details Section */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 text-left mb-3">
+        <div className="flex items-center space-x-2">
+          <h1 className="text-4xl font-bold text-gray-800 text-left mb-3">
+            {renderInput({
+              value: resumeData.personalDetails.fullName,
+              onChange: (value) => updateField('personalDetails', null, 'fullName', value),
+              className: "text-left text-cyan-700",
+              ariaLabel: "Full name"
+            })}
+          </h1>
+          <p>
           {renderInput({
-            value: resumeData.personalDetails.fullName,
-            onChange: (value) => updateField('personalDetails', null, 'fullName', value),
-            className: "text-left text-cyan-700",
-            ariaLabel: "Full name"
-          })}
-        </h1>
+              value: resumeData.jobTitle,
+              onChange: (value) => updateField('jobTitle',null, 'jobTitle', value),
+              className: "text-left text-cyan-800",
+              ariaLabel: "Job Title"
+            })}
+          </p>
+        </div>
         <div className="text-left text-gray-600 text-sm">
           {resumeData.personalDetails.email && (
             <div className="inline-flex items-center gap-1 mx-2">
