@@ -15,6 +15,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, showEnhanceButton = true, onTextChange, value, onChange, ...props }, forwardedRef) => {
     const [isEnhancing, setIsEnhancing] = React.useState(false);
     const [currentText, setCurrentText] = React.useState<string>(value as string || '');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [currentTab, setCurrentTab] = React.useState<string>('edit');
     const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 

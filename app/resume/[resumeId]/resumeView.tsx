@@ -21,7 +21,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import html2pdf from 'html2pdf.js';
-import { before } from 'node:test';
 
 // Template components mapping
 const TEMPLATES = {
