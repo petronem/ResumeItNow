@@ -15,7 +15,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, showEnhanceButton = true, onTextChange, value, onChange, ...props }, forwardedRef) => {
     const [isEnhancing, setIsEnhancing] = React.useState(false);
     const [currentText, setCurrentText] = React.useState<string>(value as string || '');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [currentTab, setCurrentTab] = React.useState<string>('edit');
     const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
@@ -24,14 +23,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       setCurrentText(value as string || '');
     }, [value]);
 
+    const { toast } = useToast();
+
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       setCurrentText(newText);
+      
+      // Trigger both onTextChange and original onChange
       onTextChange?.(newText);
       onChange?.(e);
     };
-
-    const { toast } = useToast();
 
     const handleEnhance = async () => {
       if (!currentText.trim()) {
@@ -63,16 +64,23 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           throw new Error(data.error);
         }
 
-        // Update both internal state and parent
+        // Update text and trigger change event
         const newText = data.enhanced;
-        setCurrentText(newText);
-        onTextChange?.(newText);
-
-        // Create a synthetic event to maintain compatibility
         const syntheticEvent = {
-          target: { value: newText }
+          target: { 
+            value: newText,
+            name: props.name || '' // Ensure name is passed for react-hook-form
+          }
         } as React.ChangeEvent<HTMLTextAreaElement>;
+
+        // Update state
+        setCurrentText(newText);
+        
+        // Trigger onChange to work with react-hook-form
         onChange?.(syntheticEvent);
+        
+        // Additional optional callback
+        onTextChange?.(newText);
 
         toast({
           title: "Success",
@@ -108,15 +116,18 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         newText = text.substring(0, start) + `${markdownSyntax} ` + text.substring(end);
       }
 
-      // Update both internal state and parent
-      setCurrentText(newText);
-      onTextChange?.(newText);
-
-      // Create a synthetic event to maintain compatibility
+      // Create synthetic event to trigger react-hook-form update
       const syntheticEvent = {
-        target: { value: newText }
+        target: { 
+          value: newText,
+          name: props.name || '' 
+        }
       } as React.ChangeEvent<HTMLTextAreaElement>;
+
+      // Update state and trigger onChange
+      setCurrentText(newText);
       onChange?.(syntheticEvent);
+      onTextChange?.(newText);
 
       textarea.focus();
     };
@@ -162,26 +173,25 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         <Tabs defaultValue="edit" onValueChange={setCurrentTab}>
           <div className="flex justify-between">
-
-          <TabsList className="mb-2">
-            <TabsTrigger value="edit" className="flex items-center gap-1">
-              <Edit className="h-4 w-4" />
-              Edit
-            </TabsTrigger>
-            <TabsTrigger value="preview" className="flex items-center gap-1">
-              <Eye className="h-4 w-4" />
-              Preview
-            </TabsTrigger>
-          </TabsList>
-          {showEnhanceButton && (
-            <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            className="bg-purple-400 hover:bg-purple-500 transition hover:scale-105"
-            onClick={handleEnhance}
-            disabled={isEnhancing}
-            >
+            <TabsList className="mb-2">
+              <TabsTrigger value="edit" className="flex items-center gap-1">
+                <Edit className="h-4 w-4" />
+                Edit
+              </TabsTrigger>
+              <TabsTrigger value="preview" className="flex items-center gap-1">
+                <Eye className="h-4 w-4" />
+                Preview
+              </TabsTrigger>
+            </TabsList>
+            {showEnhanceButton && (
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                className="bg-purple-400 hover:bg-purple-500 transition hover:scale-105"
+                onClick={handleEnhance}
+                disabled={isEnhancing}
+              >
                 {isEnhancing ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
