@@ -174,67 +174,74 @@ export default function ResumeView({
   const TemplateComponent = TEMPLATES[selectedTemplate];
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 py-4">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 py-4 px-4 sm:px-0">
       <Card className="max-w-[21cm] mx-auto mb-4">
-        <CardContent className="flex justify-between items-center p-4">
-          <div className="flex items-center gap-4">
-            <Select
-              value={selectedTemplate}
-              onValueChange={(value: TemplateKey) => setSelectedTemplate(value)}
-              disabled={isEditing}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Template" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="modern">Modern Template</SelectItem>
-                <SelectItem value="minimal">Minimal Template</SelectItem>
-                <SelectItem value="professional">Professional Template</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button
-              variant="outline"
-              onClick={handleDownload}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Download PDF
-            </Button>
-          </div>
-          <div className="flex gap-2">
-            {isEditing ? (
-              <>
-                <Button
-                  variant="default"
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="flex items-center gap-2"
-                >
-                  <Save className="h-4 w-4" />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setResumeData(initialResumeData);
-                    setIsEditing(false);
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  <X className="h-4 w-4" />
-                  Cancel
-                </Button>
-              </>
-            ) : (
+        <CardContent className="p-4">
+          {/* Stack controls vertically on mobile, horizontally on larger screens */}
+          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:justify-between sm:items-center">
+            {/* Template and Download controls */}
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 sm:items-center">
+              <Select
+                value={selectedTemplate}
+                onValueChange={(value: TemplateKey) => setSelectedTemplate(value)}
+                disabled={isEditing}
+              >
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Select Template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="modern">Modern Template</SelectItem>
+                  <SelectItem value="minimal">Minimal Template</SelectItem>
+                  <SelectItem value="professional">Professional Template</SelectItem>
+                </SelectContent>
+              </Select>
+              
               <Button
                 variant="outline"
-                onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2"
+                onClick={handleDownload}
+                className="w-full sm:w-auto flex items-center justify-center gap-2"
               >
-                <Edit className="h-4 w-4" />
-                Edit Resume
+                <Download className="h-4 w-4" />
+                Download PDF
               </Button>
-            )}
+            </div>
+
+            {/* Edit/Save controls */}
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              {isEditing ? (
+                <>
+                  <Button
+                    variant="default"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="w-full sm:w-auto flex items-center justify-center gap-2"
+                  >
+                    <Save className="h-4 w-4" />
+                    {isSaving ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setResumeData(initialResumeData);
+                      setIsEditing(false);
+                    }}
+                    className="w-full sm:w-auto flex items-center justify-center gap-2"
+                  >
+                    <X className="h-4 w-4" />
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditing(true)}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
+                >
+                  <Edit className="h-4 w-4" />
+                  Edit Resume
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -246,8 +253,9 @@ export default function ResumeView({
           updateField={updateField}
         />
       </div>
-       {/* Print Styles */}
-       <style jsx global>{`
+
+      {/* Print Styles */}
+      <style jsx global>{`
         @media print {
           @page {
             margin: 0.5cm;
