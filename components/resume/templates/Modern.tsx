@@ -198,7 +198,14 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
             <div className="w-full h-1 mt-5 bg-cyan-700"></div>
           </div>
           {resumeData.workExperience.map((experience, index) => (
-            <div key={index} className="mb-4 last:mb-0">
+            <div 
+              key={index} 
+              className={`pb-4 ${
+                index !== resumeData.workExperience.length - 1 
+                  ? "mb-4 border-b border-dashed border-cyan-700" 
+                  : "last:mb-0"
+              }`}
+            >
               <div className="flex justify-between items-start mb-1">
                 <div className="flex-1">
                   {renderInput({
@@ -250,7 +257,14 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
             <div className="w-full h-1 mt-5 bg-cyan-700"></div>
           </div>
           {resumeData.projects.map((project, index) => (
-            <div key={index} className="mb-4 last:mb-0">
+            <div 
+              key={index} 
+              className={`pb-4 ${
+                index !== resumeData.projects.length - 1 
+                  ? "mb-4 border-b border-dashed border-cyan-700" 
+                  : "last:mb-0"
+              }`}
+            >
               <div className="flex justify-between items-start mb-1">
                 {renderInput({
                   value: project.projectName,

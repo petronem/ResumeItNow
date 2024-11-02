@@ -196,7 +196,14 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             <h2 className='text-center w-full'>Work Experience</h2>
           </div>
           {resumeData.workExperience.map((experience, index) => (
-            <div key={index} className="mb-4 last:mb-0">
+            <div 
+            key={index} 
+            className={`pb-4 ${
+              index !== resumeData.workExperience.length - 1 
+                ? "mb-4 border-b-2 border-dashed border-gray-300" 
+                : "last:mb-0"
+              }`}
+            >
               <div className="flex justify-between items-start mb-1">
                 <div className="flex-1">
                   {renderInput({
@@ -247,7 +254,14 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
             <h2 className='text-center w-full'>Projects</h2>
           </div>
           {resumeData.projects.map((project, index) => (
-            <div key={index} className="mb-4 last:mb-0">
+            <div 
+            key={index} 
+            className={`pb-4 ${
+              index !== resumeData.projects.length - 1 
+                ? "mb-4 border-b-2 border-dashed border-gray-300" 
+                : "last:mb-0"
+              }`}
+              >
               <div className="flex items-center justify-between mb-1">
                 {renderInput({
                   value: project.projectName,
