@@ -324,13 +324,13 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                 className: "text-black font-medium text-sm",
                 ariaLabel: "Institution"
               })}
-              {edu.grade && (
+              {edu.description && (
                 <div className="text-gray-600 text-sm">
-                  GPA: {renderInput({
-                    value: edu.grade,
-                    onChange: (value) => updateField('education', index, 'grade', value),
+                  {renderInput({
+                    value: edu.description,
+                    onChange: (value) => updateField('education', index, 'description', value),
                     className: "ml-1 inline-block w-16",
-                    ariaLabel: "GPA"
+                    ariaLabel: ""
                   })}
                 </div>
               )}

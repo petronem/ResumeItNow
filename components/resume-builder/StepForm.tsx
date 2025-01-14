@@ -110,7 +110,7 @@ export default function StepForm() {
         location: "",
         startDate: "",
         endDate: "",
-        grade: ""
+        description: ""
       }],
       skills: [{
         category: "",

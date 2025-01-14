@@ -32,7 +32,7 @@ export interface FormValues {
     location?: string;
     startDate: string;
     endDate?: string;
-    grade?: string;
+    description?: string;
   }[];
   skills: {
     category: string;
@@ -276,8 +276,8 @@ export const EducationStep: React.FC<EducationStepProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label>Grade/GPA</Label>
-              <Input {...register(`education.${index}.grade`)} />
+              <Label>Description</Label>
+              <Input {...register(`education.${index}.description`)} placeholder='GPA: 9.0/10'/>
             </div>
           </div>
         </Card>
@@ -292,7 +292,7 @@ export const EducationStep: React.FC<EducationStepProps> = ({
           location: "", 
           startDate: "", 
           endDate: "", 
-          grade: "" 
+          description: "" 
         })}
       >
         Add Education

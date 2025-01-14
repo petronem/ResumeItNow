@@ -36,7 +36,7 @@ export const jobTitleSchema = z.object({
       location: z.string().optional(),
       startDate: z.string().min(1, "Start date is required"),
       endDate: z.string().optional(),
-      grade: z.string().optional(),
+      description: z.string().optional(),
     }))
   });
 

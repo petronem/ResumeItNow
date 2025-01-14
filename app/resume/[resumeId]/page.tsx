@@ -29,7 +29,7 @@ interface Education {
   location: string;
   startDate: string;
   endDate: string;
-  grade: string;
+  description: string;
 }
 
 interface Skill {

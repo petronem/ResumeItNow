@@ -22,7 +22,7 @@ export interface PersonalDetails {
     location: string;
     startDate: string;
     endDate: string;
-    grade: string;
+    description: string;
   }
   
   export interface Skill {

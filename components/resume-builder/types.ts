@@ -23,7 +23,7 @@ export type FormValues = {
       location?: string;
       startDate: string;
       endDate?: string;
-      grade?: string;
+      description?: string;
     }[];
     skills: {
       category: string;

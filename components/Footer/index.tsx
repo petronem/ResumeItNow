@@ -44,7 +44,7 @@ const supportLinks: FooterSection = {
 const socialLinks: SocialLink[] = [
   {
     platform: "GitHub",
-    href: "https://github.com/CityIsBetter/ResumeItNow",
+    href: "https://github.com/maheshpaulj/ResumeItNow",
     icon: <Github className="h-5 w-5" />,
   },
   {
