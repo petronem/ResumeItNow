@@ -10,7 +10,18 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { FileText, Mail, User, Trash2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/toaster"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface Resume {
   id: string
@@ -20,26 +31,26 @@ interface Resume {
 }
 
 function ProfileSkeleton() {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid gap-8 md:grid-cols-[300px_1fr]">
-          <Skeleton className="h-[300px]" />
-          <Skeleton className="h-[500px]" />
-        </div>
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid gap-8 md:grid-cols-[300px_1fr]">
+        <Skeleton className="h-[300px]" />
+        <Skeleton className="h-[500px]" />
       </div>
-    )
-  }
+    </div>
+  )
+}
 
 export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [resumes, setResumes] = useState<Resume[]>([])
-  const [loading, setLoading] = useState(true)
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const settings = {
     displayName: window.localStorage.getItem("resumeitnow_name") || session?.user?.name,
     defaultTemplate: window.localStorage.getItem("resumeitnow_template") || 'modern'
-  }
+  };
 
   const deleteResume = async (resumeId: string) => {
     try {
@@ -50,7 +61,6 @@ export default function Page() {
         duration: 3000,
       });
       
-      // Remove the deleted resume from the list
       setResumes((prevResumes) => prevResumes.filter((resume) => resume.id !== resumeId));
     } catch (error) {
       console.error("Error deleting resume:", error);
@@ -62,39 +72,38 @@ export default function Page() {
       });
     }
   };
-  
 
   useEffect(() => {
     const fetchResumes = async () => {
-      if (!session?.user?.name) return
+      if (!session?.user?.name) return;
 
       try {
-        const resumesRef = collection(db, `users/${session.user.email}/resumes`)
-        const resumesSnapshot = await getDocs(resumesRef)
+        const resumesRef = collection(db, `users/${session.user.email}/resumes`);
+        const resumesSnapshot = await getDocs(resumesRef);
         
         const resumeData = resumesSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
-        })) as Resume[]
+        })) as Resume[];
 
-        setResumes(resumeData)
+        setResumes(resumeData);
       } catch (error) {
-        console.error('Error fetching resumes:', error)
+        console.error('Error fetching resumes:', error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchResumes()
-  }, [session?.user?.email, session?.user?.name])
+    fetchResumes();
+  }, [session?.user?.email, session?.user?.name]);
 
   if (status === 'loading') {
-    return <ProfileSkeleton />
+    return <ProfileSkeleton />;
   }
 
   if (!session) {
-    router.push('/auth/signin')
-    return null
+    router.push('/auth/signin');
+    return null;
   }
 
   return (
@@ -157,8 +166,8 @@ export default function Page() {
                       className="hover:bg-accent transition-colors cursor-pointer"
                     >
                       <CardHeader>
-                        <div className="flex items-center justify-between" onClick={() => router.push(`/resume/${resume.id}`)}>
-                          <div className="cursor-pointer">
+                        <div className="flex items-center justify-between">
+                          <div className="cursor-pointer" onClick={() => router.push(`/resume/${resume.id}`)}>
                             <CardTitle className="text-lg">{resume.id}</CardTitle>
                             <CardDescription>
                               Created: {new Date(resume.createdAt).toLocaleDateString()}
@@ -166,15 +175,30 @@ export default function Page() {
                           </div>
                           <div className="flex items-center">
                             <FileText className="w-6 h-6 text-muted-foreground mr-2" />
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteResume(resume.id);
-                              }}
-                              className="text-red-500 hover:text-red-700 transition-colors"
-                            >
-                              <Trash2 />
-                            </button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <button className="text-red-500 hover:text-red-700 transition-colors">
+                                  <Trash2 />
+                                </button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your resume.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteResume(resume.id)}
+                                    className="bg-red-500 hover:bg-red-600"
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
                         </div>
                       </CardHeader>
@@ -187,5 +211,5 @@ export default function Page() {
       </div>
       <Toaster />
     </div>
-  )
+  );
 }
