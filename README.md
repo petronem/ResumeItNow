@@ -3,10 +3,10 @@
 <div align="center">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/CityIsBetter/ResumeItNow/issues)
-[![Stars](https://img.shields.io/github/stars/CityIsBetter/ResumeItNow?style=social)](https://github.com/CityIsBetter/ResumeItNow/stargazers)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maheshpaulj/ResumeItNow/issues)
+[![Stars](https://img.shields.io/github/stars/maheshpaulj/ResumeItNow?style=social)](https://github.com/maheshpaulj/ResumeItNow/stargazers)
 
-[Demo](https://resumeitnow.vercel.app) · [Report Bug](https://github.com/CityIsBetter/ResumeItNow/issues) · [Request Feature](https://github.com/CityIsBetter/ResumeItNow/issues)
+[Demo](https://resumeitnow.vercel.app) · [Report Bug](https://github.com/maheshpaulj/ResumeItNow/issues) · [Request Feature](https://github.com/maheshpaulj/ResumeItNow/issues)
 
 ![ResumeItNow Preview](https://i.imgur.com/F0iOLCB.jpeg)
 
