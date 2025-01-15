@@ -333,7 +333,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
                   {renderInput({
                     value: edu.description,
                     onChange: (value) => updateField('education', index, 'description', value),
-                    className: "ml-1 inline-block w-16",
+                    className: "inline-block",
                     ariaLabel: ""
                   })}
                 </div>
@@ -414,7 +414,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
           <SectionHeader title="Languages" />
           <div className="grid grid-cols-2 gap-4">
             {resumeData.languages.map((language, index) => (
-              <div key={index} className="text-sm flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+              <div key={index} className="text-sm flex items-center gap-2 p-2 rounded-md">
                 {renderInput({
                   value: language.language,
                   onChange: (value) => updateField('languages', index, 'language', value),

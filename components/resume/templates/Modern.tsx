@@ -9,12 +9,14 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
     
     return text
       .split('\n')
-      .map(line => {
+      .map((line, index) => {
         // Convert bold text
         line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         
         // Convert bullet points
-        if (line.trim().startsWith('- ')) {
+        if (line.trim().startsWith('- ') && index === 0) {
+          line = `• ${line.substring(2)}`;
+        } else if(line.trim().startsWith('- ')) {
           line = `<br/>• ${line.substring(2)}`;
         }
         return line;
@@ -269,7 +271,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                 {renderInput({
                   value: project.projectName,
                   onChange: (value) => updateField('projects', index, 'projectName', value),
-                  className: "font-semibold text-gray-800",
+                  className: "text-cyan-700",
                   ariaLabel: "Project name"
                 })}
                 {project.link && renderInput({
@@ -333,7 +335,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                   {renderInput({
                     value: edu.description,
                     onChange: (value) => updateField('education', index, 'description', value),
-                    className: "ml-1 inline-block w-16",
+                    className: "inline-block",
                     ariaLabel: ""
                   })}
                 </div>

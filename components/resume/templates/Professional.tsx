@@ -329,7 +329,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                   {renderInput({
                     value: edu.description,
                     onChange: (value) => updateField('education', index, 'description', value),
-                    className: "ml-1 inline-block w-16",
+                    className: "inline-block",
                     ariaLabel: ""
                   })}
                 </div>

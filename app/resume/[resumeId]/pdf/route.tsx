@@ -97,7 +97,7 @@ const minimal = StyleSheet.create({
     marginBottom: 5,
   },
   jobTitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     marginBottom: 10,
   },
@@ -191,7 +191,7 @@ const modern = StyleSheet.create({
     color: "#0e7490"
   },
   jobTitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#155e75',
     alignSelf: "center"
   },
@@ -234,7 +234,7 @@ const modern = StyleSheet.create({
     borderBottom: 1,
     borderBottomStyle: "dashed",
     borderBottomWidth: 1,
-    borderBottomColor: "#155e75",
+    borderBottomColor: "#0891b2",
     paddingBottom: 8
   },
   experienceHeader: {
@@ -297,6 +297,7 @@ const professional = StyleSheet.create({
   },
   headerName: {
     display: "flex",
+    fontFamily: "Helvetica-Bold"
   },
   name: {
     fontSize: 24,
@@ -304,9 +305,10 @@ const professional = StyleSheet.create({
     marginBottom: 5,
   },
   jobTitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 12,
+    color: '#000',
     marginBottom: 10,
+    fontFamily: "Helvetica"
   },
   contactInfo: {
     display: "flex",
@@ -501,7 +503,7 @@ const MinimalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
                 </View>
                 <Text>{edu.institution}</Text>
                 {edu.description && (
-                  <Text style={minimal.description}>{edu.description}</Text>
+                  <Text style={minimal.p}>{edu.description}</Text>
                 )}
               </View>
             ))}
@@ -628,12 +630,12 @@ const ModernTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
             <View key={index} style={index === (resumeData.projects.length - 1) ? modern.experienceItem : modern.experienceLastItem} wrap={false}>
               <View style={modern.experienceHeader}>
                 <Text style={modern.companyName}>{project.projectName}</Text>
+                {project.link && (
+                  <Text style={{ color: '#0077B5', fontSize: 10, fontFamily:"Times-Italic" }}>
+                    {project.link}
+                  </Text>
+                )}
               </View>
-              {project.link && (
-                <Text style={{ color: '#0077B5', fontSize: 10, marginBottom: 3 }}>
-                  {project.link}
-                </Text>
-              )}
               <Text style={modern.description}>{renderPDFContent(project.description)}</Text>
             </View>
           ))}
@@ -655,7 +657,7 @@ const ModernTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
               </View>
               <Text style={modern.companyName}>{edu.institution}</Text>
               {edu.description && (
-                <Text style={modern.description}>{edu.description}</Text>
+                <Text style={modern.p}>{edu.description}</Text>
               )}
             </View>
           ))}
@@ -759,7 +761,7 @@ const ProfessionalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
         <View style={professional.section}>
           <Text style={professional.sectionTitle}>Work Experience</Text>
           {resumeData.workExperience.map((exp, index) => (
-            <View key={index} style={0 === (resumeData.workExperience.length - 1) ? professional.experienceItem : professional.experienceLastItem} wrap={false}>
+            <View key={index} style={index === (resumeData.workExperience.length - 1) ? professional.experienceItem : professional.experienceLastItem} wrap={false}>
               <View style={professional.experienceHeader}>
                 <Text style={professional.companyName}>{exp.jobTitle}</Text>
                 <Text style={professional.dates}>{`${exp.startDate} - ${exp.endDate}`}</Text>
@@ -816,7 +818,7 @@ const ProfessionalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
               </View>
               <Text>{edu.institution}</Text>
               {edu.description && (
-                <Text style={professional.description}>{edu.description}</Text>
+                <Text style={professional.p}>{edu.description}</Text>
               )}
             </View>
           ))}
@@ -843,12 +845,12 @@ const ProfessionalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
         <View style={professional.section}>
           <Text style={professional.sectionTitle}>Certifications</Text>
           {resumeData.certifications.map((cert, index) => (
-            <View key={index} style={index === resumeData.certifications.length - 1 ? professional.headerName : professional.experienceItem}>
+            <View key={index} style={index < resumeData.certifications.length - 1 ?  professional.experienceItem : {}}>
               <View style={professional.experienceHeader}>
                 <Text style={professional.companyName}>{cert.certificationName}</Text>
                 <Text style={professional.dates}>{cert.issueDate}</Text>
               </View>
-              <Text style={professional.p}>{cert.issuingOrganization}</Text>
+              <Text style={professional.contactInfo}>{cert.issuingOrganization}</Text>
             </View>
           ))}
         </View>
@@ -911,11 +913,11 @@ export async function GET(
 
     // Return PDF stream with appropriate headers
     return new NextResponse(stream as unknown as ReadableStream
-        , {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
-      },}
+      //   , {
+      // headers: {
+      //   'Content-Type': 'application/pdf',
+      //   'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
+      // },}
 );
 
   } catch (error) {
