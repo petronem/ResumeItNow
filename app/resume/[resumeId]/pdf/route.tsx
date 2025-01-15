@@ -911,11 +911,11 @@ export async function GET(
 
     // Return PDF stream with appropriate headers
     return new NextResponse(stream as unknown as ReadableStream
-      //   , {
-      // headers: {
-      //   'Content-Type': 'application/pdf',
-      //   'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
-      // },}
+        , {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
+      },}
 );
 
   } catch (error) {
