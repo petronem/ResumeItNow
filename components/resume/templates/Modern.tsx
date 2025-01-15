@@ -178,7 +178,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Professional Summary</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           {renderInput({
             value: resumeData.objective,
@@ -192,10 +192,10 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
 
       {/* Work Experience Section */}
       {hasContent(resumeData.workExperience) && (
-        <div className="mb-6 text-cyan-700">
+        <div className="mb-6 text-cyan-700 flex-1">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Work Experience</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           {resumeData.workExperience.map((experience, index) => (
             <div 
@@ -254,7 +254,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Projects</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           {resumeData.projects.map((project, index) => (
             <div 
@@ -297,7 +297,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Education</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           {resumeData.education.map((edu, index) => (
             <div key={index} className="mb-4 last:mb-0">
@@ -348,7 +348,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Technical Skills</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           <div className="space-y-2">
             {resumeData.skills.map((categoryGroup, index) => (
@@ -377,7 +377,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Certifications</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           {resumeData.certifications.map((cert, index) => (
             <div key={index} className="mb-3 last:mb-0">
@@ -415,7 +415,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Languages</h2>
-            <div className="w-full h-1 mt-5 bg-cyan-700"></div>
+            <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           <div className="flex flex-col">
             {resumeData.languages.map((language, index) => (

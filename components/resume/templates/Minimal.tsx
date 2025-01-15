@@ -276,7 +276,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
                 {project.link && renderInput({
                   value: project.link,
                   onChange: (value) => updateField('projects', index, 'link', value),
-                  className: "text-blue-600 hover:underline text-sm italic",
+                  className: "text-blue-600 hover:underline text-sm",
                   link: true,
                   ariaLabel: "Project link"
                 })}

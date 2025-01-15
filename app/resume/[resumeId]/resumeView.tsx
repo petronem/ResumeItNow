@@ -21,6 +21,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import html2pdf from 'html2pdf.js';
+import { toast } from '@/hooks/use-toast';
 
 // Template components mapping
 const TEMPLATES = {
@@ -51,37 +52,63 @@ export default function ResumeView({
     }
   }, []);
 
-  const handleDownload = async () => {
-    const element = document.getElementById('resume-content');
+ const handleDownload = async () => {
     
-    if (!element) {
-      console.error('Resume content element not found');
-      return;
-    }
-  
-    const opt = {
-      margin: [5.2, 4.5, 5.5, 4.5],
-      filename: `${resumeData.personalDetails.fullName}'s Resume_made using ResumeItNow.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { 
-        useCORS: true,  // Handles cross-origin images
-        logging: false  // Reduces console logging
-      },
-      jsPDF:{ 
-        unit: 'mm', 
-        format: 'a4', 
-        orientation: 'portrait' 
-      },
-      pagebreak: { mode: 'legacy' }
-    };
-  
     try {
-      // Generate and save PDF
-      await html2pdf().set(opt).from(element).save();
-
+      // Show loading toast
+      toast({
+        title: "Generating PDF...",
+        duration: 3000,
+      });
+  
+      // Make the request to our PDF generation endpoint
+      const response = await fetch(
+        `/resume/${resumeId}/pdf?template=${selectedTemplate}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+  
+      // Get the blob from the response
+      const blob = await response.blob();
+  
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(blob);
+  
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', resumeData.personalDetails.fullName + "'s Resume - Made using ResumeItNow");
+  
+      // Append to body, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      // Clean up the URL
+      window.URL.revokeObjectURL(url);
+  
+      // Show success message
+      toast({
+        title: "Success",
+        description: "PDF downloaded successfully!",
+        duration: 3000,
+      });
+  
     } catch (error) {
-      console.error('PDF generation failed:', error);
-      alert('Failed to download PDF. Please try again.');
+      console.error('Error downloading PDF:', error);
+      toast({
+        title: "Failed",
+        description: "Failed to download PDF!",
+        duration: 3000,
+      });
     }
   };
 
@@ -198,7 +225,7 @@ export default function ResumeView({
               
               <Button
                 variant="outline"
-                onClick={handleDownload}
+                onClick={() => handleDownload()}
                 className="w-full sm:w-auto flex items-center justify-center gap-2"
               >
                 <Download className="h-4 w-4" />
