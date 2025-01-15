@@ -117,7 +117,7 @@ const minimal = StyleSheet.create({
     paddingBottom: 2,
   },
   experienceItem: {
-    marginBottom: 8,
+    paddingBottom: 8,
   },
   experienceLastItem: {
     marginBottom: 12,
@@ -457,7 +457,7 @@ const MinimalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
           <View style={minimal.section}>
             <Text style={minimal.sectionTitle}>Work Experience</Text>
             {resumeData.workExperience.map((exp, index) => (
-              <View key={index} style={minimal.experienceItem} wrap={false}>
+              <View key={index} style={index === (resumeData.workExperience.length - 1) ? minimal.experienceItem : minimal.experienceLastItem} wrap={false}>
                 <View style={minimal.experienceHeader}>
                   <Text style={minimal.companyName}>{exp.jobTitle}</Text>
                   <Text style={minimal.dates}>{`${exp.startDate} - ${exp.endDate}`}</Text>
@@ -474,7 +474,7 @@ const MinimalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
           <View style={minimal.section}>
             <Text style={minimal.sectionTitle}>Projects</Text>
             {resumeData.projects.map((project, index) => ( 
-              <View key={index} style={index === (resumeData.projects.length - 1) ? minimal.experienceItem : minimal.experienceLastItem}>
+              <View key={index} style={index === (resumeData.projects.length - 1) ? minimal.experienceItem : minimal.experienceLastItem} wrap={false}>
                 <View style={minimal.experienceHeader}>
                   <Text style={minimal.companyName}>{project.projectName}</Text>
                 </View>
@@ -759,7 +759,7 @@ const ProfessionalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
         <View style={professional.section}>
           <Text style={professional.sectionTitle}>Work Experience</Text>
           {resumeData.workExperience.map((exp, index) => (
-            <View key={index} style={professional.experienceItem} wrap={false}>
+            <View key={index} style={0 === (resumeData.workExperience.length - 1) ? professional.experienceItem : professional.experienceLastItem} wrap={false}>
               <View style={professional.experienceHeader}>
                 <Text style={professional.companyName}>{exp.jobTitle}</Text>
                 <Text style={professional.dates}>{`${exp.startDate} - ${exp.endDate}`}</Text>
@@ -911,11 +911,11 @@ export async function GET(
 
     // Return PDF stream with appropriate headers
     return new NextResponse(stream as unknown as ReadableStream
-        , {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
-      },}
+      //   , {
+      // headers: {
+      //   'Content-Type': 'application/pdf',
+      //   'Content-Disposition': `attachment; filename="${resumeData.personalDetails.fullName}'s Resume - Made using ResumeItNow.pdf"`,
+      // },}
 );
 
   } catch (error) {
