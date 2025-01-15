@@ -20,7 +20,6 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import html2pdf from 'html2pdf.js';
 import { toast } from '@/hooks/use-toast';
 
 // Template components mapping
