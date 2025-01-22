@@ -1,46 +1,62 @@
-// app/api/pdf/route.ts
-import { NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
-import chromium from '@sparticuz/chromium';
+import { NextResponse, type NextRequest } from "next/server";
+import puppeteer, { type Browser } from 'puppeteer';
+import puppeteerCore, { type Browser as BrowserCore } from 'puppeteer-core';
+import chromium from '@sparticuz/chromium-min';
 
-export async function GET() {
-  let browser = null;
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
-  try {
-    if (process.env.NODE_ENV === 'development') {
-      // Use local Puppeteer in development
-      browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        headless: true,
-      });
-    } else {
-      // Use @sparticuz/chromium in production
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(), // Ensure this is correctly set
-        headless: chromium.headless,
-      });
+export async function GET(request: NextRequest) {
+    try {
+        // THE CORE LOGIC
+        let browser: Browser | BrowserCore;
+        if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+            // Configure the version based on your package.json (for your future usage).
+            const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar')
+            browser = await puppeteerCore.launch({
+                executablePath,
+                // You can pass other configs as required
+                args: chromium.args,
+                headless: chromium.headless,
+                defaultViewport: chromium.defaultViewport
+            })
+        } else {
+            browser = await puppeteer.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
+            })
+        }
+        const page = await browser.newPage();
+
+        await page.goto('https://www.google.com', {
+            waitUntil: 'networkidle0'
+        });
+
+        const pdf = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+            margin: {
+                top: '10px',
+                right: '10px',
+                bottom: '10px',
+                left: '10px'
+            }
+        });
+
+        await browser.close();
+
+        return new NextResponse(pdf, {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename=google.pdf',
+            },
+        });
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        return NextResponse.json(
+            { message: 'Error generating PDF' },
+            { status: 500 }
+        );
     }
-
-    const page = await browser.newPage();
-    await page.goto('https://www.google.com', { waitUntil: 'networkidle0' });
-    const pdfBuffer = await page.pdf({ format: 'A4' });
-
-    await browser.close();
-
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename=google.pdf',
-      },
-    });
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    return new NextResponse('Failed to generate PDF', { status: 500 });
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
-  }
 }
