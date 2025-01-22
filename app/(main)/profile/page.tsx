@@ -102,7 +102,7 @@ export default function Page() {
   }
 
   if (!session) {
-    router.push('/auth/signin');
+    router.push('/signin');
     return null;
   }
 

@@ -9,12 +9,14 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
     
     return text
       .split('\n')
-      .map(line => {
+      .map((line, index) => {
         // Convert bold text
         line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         
         // Convert bullet points
-        if (line.trim().startsWith('- ')) {
+        if (line.trim().startsWith('- ') && index === 0) {
+          line = `• ${line.substring(2)}`;
+        } else if(line.trim().startsWith('- ') && index > 0){
           line = `<br/>• ${line.substring(2)}`;
         }
         return line;
@@ -96,7 +98,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
   return (
     <div className="w-full mx-auto bg-white px-8">
       {/* Personal Details Section */}
-      <div className="mb-8">
+      <div className="mb-8 break-inside-avoid">
         <div className="flex justify-between w-full">
           <div className="flex flex-col">
             <h1 className="text-4xl font-bold text-gray-800 text-center">
@@ -175,7 +177,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
 
       {/* Professional Summary */}
       {hasContent(resumeData.objective) && (
-        <div className="mb-6 text-black">
+        <div className="mb-6 text-black break-inside-avoid">
           <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black">
             <h2 className='text-center w-full'>Professional Summary</h2>
           </div>
@@ -198,7 +200,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
           {resumeData.workExperience.map((experience, index) => (
             <div 
             key={index} 
-            className={`pb-4 ${
+            className={`pb-4 break-inside-avoid ${
               index !== resumeData.workExperience.length - 1 
                 ? "mb-4 border-b-2 border-dashed border-gray-300" 
                 : "last:mb-0"
@@ -256,7 +258,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
           {resumeData.projects.map((project, index) => (
             <div 
             key={index} 
-            className={`pb-4 ${
+            className={`pb-4 break-inside-avoid ${
               index !== resumeData.projects.length - 1 
                 ? "mb-4 border-b-2 border-dashed border-gray-300" 
                 : "last:mb-0"
@@ -291,7 +293,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
 
       {/* Education Section */}
       {hasContent(resumeData.education) && (
-        <div className="mb-6 text-black">
+        <div className="mb-6 text-black break-inside-avoid">
           <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-black ">
             <h2 className='text-center w-full'>Education</h2>
           </div>
@@ -347,7 +349,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
           </div>
           <div className="space-y-2">
             {resumeData.skills.map((skill, index) => (
-              <div key={index} className="flex items-start">
+              <div key={index} className="flex items-start break-inside-avoid">
                 {skill.skillType === 'individual' ? (
                   <>
                     {renderInput({

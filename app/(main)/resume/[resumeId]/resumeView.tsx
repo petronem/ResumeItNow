@@ -52,67 +52,44 @@ export default function ResumeView({
     }
   }, []);
 
- const handleDownload = async () => {
+  const handleDownload = async () => {
     setIsDownloading(true);
+  
     try {
-      // Show loading toast
-      toast({
-        title: "Generating PDF...",
-        duration: 3000,
+      const response = await fetch(`/api/pdf?data=${encodeURIComponent(JSON.stringify(resumeData))}&template=${selectedTemplate}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
   
-      // Make the request to our PDF generation endpoint
-      const response = await fetch(
-        `/resume/${resumeId}/pdf?template=${selectedTemplate}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-  
       if (!response.ok) {
-        setIsDownloading(false);
         throw new Error('Failed to generate PDF');
       }
   
-      // Get the blob from the response
       const blob = await response.blob();
-  
-      // Create a URL for the blob
       const url = window.URL.createObjectURL(blob);
-  
-      // Create a temporary link element
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', resumeData.personalDetails.fullName + "'s Resume - Made using ResumeItNow");
-  
-      // Append to body, click, and remove
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-  
-      // Clean up the URL
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.pdf';
+      a.click();
       window.URL.revokeObjectURL(url);
-  
-      // Show success message
       setIsDownloading(false);
       toast({
         title: "Success",
         description: "PDF downloaded successfully!",
         duration: 3000,
       });
-  
     } catch (error) {
-      console.error('Error downloading PDF:', error);
       toast({
         title: "Failed",
         description: "Failed to download PDF!",
         duration: 3000,
       });
+      setIsDownloading(false);
+      console.error('Error downloading PDF:', error);
     }
-  };
+  };  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function flattenObject(obj: any, parentKey = ''): { [key: string]: any } {
@@ -285,12 +262,14 @@ export default function ResumeView({
         </CardContent>
       </Card>
 
-      <div className='flex justify-self-center max-w-[21cm] w-full bg-white shadow-lg pt-8 print:shadow-none' id='resume-content'>
-        <TemplateComponent 
-          resumeData={resumeData}
-          isEditing={isEditing}
-          updateField={updateField}
-          />
+      <div className='flex justify-self-center max-w-[21cm] min-h-[29.7cm] w-full bg-white shadow-lg pt-8 print:shadow-none'>
+        <div className="max-w-[21cm] w-full"  id='resume-content'>
+          <TemplateComponent 
+            resumeData={resumeData}
+            isEditing={isEditing}
+            updateField={updateField}
+            />
+        </div>
       </div>
 
       {/* Print Styles */}

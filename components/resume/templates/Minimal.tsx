@@ -9,12 +9,14 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
     
     return text
       .split('\n')
-      .map(line => {
+      .map((line, index) => {
         // Convert bold text
         line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         
         // Convert bullet points
-        if (line.trim().startsWith('- ')) {
+        if (line.trim().startsWith('- ') && index === 0) {
+          line = `• ${line.substring(2)}`;
+        } else if(line.trim().startsWith('- ') && index > 0){
           line = `<br/>• ${line.substring(2)}`;
         }
         return line;
@@ -102,7 +104,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
   return (
     <div className="w-full mx-auto bg-white px-8">
       {/* Personal Details Section */}
-      <div className="mb-8">
+      <div className="mb-8 break-inside-avoid">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           {renderInput({
             value: resumeData.personalDetails.fullName,
@@ -179,7 +181,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
 
       {/* Professional Summary */}
       {hasContent(resumeData.objective) && (
-        <div className="mb-6 text-black">
+        <div className="mb-6 break-inside-avoid text-black">
           <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
             <h2>Professional Summary</h2>
           </div>
@@ -202,7 +204,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
           {resumeData.workExperience.map((experience, index) => (
             <div 
             key={index} 
-            className={`pb-4 ${
+            className={`pb-4 break-inside-avoid ${
               index !== resumeData.workExperience.length - 1 
                 ? "mb-4 border-b-2 border-dashed border-gray-300" 
                 : "last:mb-0"
@@ -260,7 +262,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
           {resumeData.projects.map((project, index) => (
             <div 
             key={index} 
-            className={`pb-4 ${
+            className={`pb-4 break-inside-avoid ${
               index !== resumeData.projects.length - 1 
                 ? "mb-4 border-b-2 border-dashed border-gray-300" 
                 : "last:mb-0"
@@ -295,7 +297,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
 
       {/* Education Section */}
       {hasContent(resumeData.education) && (
-        <div className="mb-6 text-black">
+        <div className="mb-6 break-inside-avoid text-black">
           <div className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800 pb-1">
             <h2>Education</h2>
           </div>
@@ -351,7 +353,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
           </div>
           <div className="space-y-2">
             {resumeData.skills.map((skill, index) => (
-              <div key={index} className="flex items-start">
+              <div key={index} className="flex items-start break-inside-avoid">
                 {skill.skillType === 'individual' ? (
                   <>
                     {renderInput({
@@ -425,7 +427,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
       {hasContent(resumeData.languages) && (
         <div className="mb-6 text-black">
           <SectionHeader title="Languages" />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col">
             {resumeData.languages.map((language, index) => (
               <div key={index} className="text-sm flex items-center gap-2 p-2 rounded-md">
                 {renderInput({

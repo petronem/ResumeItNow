@@ -7,40 +7,45 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
-    console.log(request);
+    const { searchParams } = new URL(request.url);
+    const data = searchParams.get('data');
+    const template = searchParams.get('template');
+
+    if (!data || !template) {
+        return NextResponse.json({ message: 'Missing data or template' }, { status: 400 });
+    }
+
     try {
         // THE CORE LOGIC
         let browser: Browser | BrowserCore;
         if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
-            // Configure the version based on your package.json (for your future usage).
             const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar')
             browser = await puppeteerCore.launch({
                 executablePath,
-                // You can pass other configs as required
                 args: chromium.args,
                 headless: chromium.headless,
                 defaultViewport: chromium.defaultViewport
-            })
+            });
         } else {
             browser = await puppeteer.launch({
                 headless: true,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
-            })
+            });
         }
-        const page = await browser.newPage();
 
-        await page.goto('https://www.google.com', {
-            waitUntil: 'networkidle0'
-        });
+        const page = await browser.newPage();
+        const url = `${process.env.BASE_URL}/resume/download?data=${encodeURIComponent(data)}&template=${template}`;
+        
+        await page.goto(url, { waitUntil: 'networkidle0' });
 
         const pdf = await page.pdf({
             format: 'A4',
             printBackground: true,
             margin: {
-                top: '10px',
+                top: '20px',
                 right: '10px',
                 bottom: '10px',
-                left: '10px'
+                left: '20px'
             }
         });
 
@@ -50,7 +55,7 @@ export async function GET(request: NextRequest) {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': 'attachment; filename=google.pdf',
+                'Content-Disposition': `attachment; filename=resume.pdf`,
             },
         });
     } catch (error) {

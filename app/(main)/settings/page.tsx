@@ -40,8 +40,13 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
 
+  if (!session) {
+    router.push('/signin');
+    return null;
+  }
+
   // Load settings from Firebase when component mounts
-  useEffect(() => {
+  useEffect(() => {  // eslint-disable-line react-hooks/rules-of-hooks
     const loadSettings = async () => {
       if (!session?.user?.email) return;
 

@@ -16,7 +16,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
         // Convert bullet points
         if (line.trim().startsWith('- ') && index === 0) {
           line = `• ${line.substring(2)}`;
-        } else if(line.trim().startsWith('- ')) {
+        } else if(line.trim().startsWith('- ') && index > 0){
           line = `<br/>• ${line.substring(2)}`;
         }
         return line;
@@ -98,7 +98,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
   return (
     <div className="w-full mx-auto bg-white px-8 pt-0">
       {/* Personal Details Section */}
-      <div className="mb-8">
+      <div className="mb-8 break-inside-avoid">
         <div className="flex items-center space-x-2">
           <h1 className="text-4xl font-bold text-gray-800 text-left mb-3">
             {renderInput({
@@ -177,7 +177,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
 
       {/* Professional Summary */}
       {hasContent(resumeData.objective) && (
-        <div className="mb-6 text-cyan-700">
+        <div className="mb-6 text-cyan-700 break-inside-avoid">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Professional Summary</h2>
             <div className="w-full h-1 mt-1 bg-cyan-700"></div>
@@ -202,7 +202,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
           {resumeData.workExperience.map((experience, index) => (
             <div 
               key={index} 
-              className={`pb-4 ${
+              className={`pb-4 break-inside-avoid ${
                 index !== resumeData.workExperience.length - 1 
                   ? "mb-4 border-b border-dashed border-cyan-700" 
                   : "last:mb-0"
@@ -261,7 +261,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
           {resumeData.projects.map((project, index) => (
             <div 
               key={index} 
-              className={`pb-4 ${
+              className={`pb-4 break-inside-avoid ${
                 index !== resumeData.projects.length - 1 
                   ? "mb-4 border-b border-dashed border-cyan-700" 
                   : "last:mb-0"
@@ -296,7 +296,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
 
       {/* Education Section */}
       {hasContent(resumeData.education) && (
-        <div className="mb-6 text-cyan-700">
+        <div className="mb-6 text-cyan-700 break-inside-avoid">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
             <h2>Education</h2>
             <div className="w-full h-1 mt-1 bg-cyan-700"></div>
@@ -354,7 +354,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
           </div>
           <div className="space-y-2">
             {resumeData.skills.map((skill, index) => (
-              <div key={index} className="flex items-start">
+              <div key={index} className="flex items-start break-inside-avoid">
                 {skill.skillType === 'individual' ? (
                   <>
                     {renderInput({
