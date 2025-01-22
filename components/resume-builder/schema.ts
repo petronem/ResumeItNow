@@ -34,19 +34,25 @@ export const jobTitleSchema = z.object({
       degree: z.string().min(1, "Degree is required"),
       institution: z.string().min(1, "School/University Name is required"),
       location: z.string().optional(),
-      startDate: z.string().min(1, "Start date is required"),
-      endDate: z.string().optional(),
+      startDate: z.string().optional(),
+      endDate: z.string().min(1, "End date(or expected) is required"),
       description: z.string().optional(),
     }))
   });
 
   export const skillsSchema = z.object({
+    skillType: z.enum(["group", "individual"]).optional(),
     skills: z.array(
-      z.object({
-        category: z.string().min(1, "Category name is required"),
-        skills: z.string().min(1, "At least one skill is required"),
-      })
-    )
+      z.union([
+        z.object({
+          category: z.string().min(1, "Category name is required"), // Group schema
+          skills: z.string().min(1, "Skills are required"),
+        }),
+        z.object({
+          skill: z.string().min(1, "Skill is required"), // Individual schema
+        }),
+      ])
+    ),
   });
 
   export const projectsSchema = z.object({
@@ -74,8 +80,8 @@ export const jobTitleSchema = z.object({
 
   export const steps = [
     { schema: personalInfoSchema, title: "Personal Info" },
-    { schema: careerObjectiveSchema, title: "Career Objective" },
     { schema: jobTitleSchema, title: "Job Title" },
+    { schema: careerObjectiveSchema, title: "Career Objective" },
     { schema: workExperienceSchema, title: "Work Experience" },
     { schema: projectsSchema, title: "Projects" },
     { schema: educationSchema, title: "Education" },

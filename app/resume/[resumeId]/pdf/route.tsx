@@ -34,8 +34,10 @@ interface PersonalDetails {
   }
 
   interface Skill {
+    skillType?: "group" | "individual";
     category: string;
     skills: string;
+    skill: string;
   }
 
   interface Project {
@@ -515,10 +517,16 @@ const MinimalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
           <View style={minimal.section} wrap={false}>
             <Text style={minimal.sectionTitle}>Technical Skills</Text>
             <View style={{ flexDirection: 'column', gap: 5 }}>
-              {resumeData.skills.map((skillGroup, index) => (
+              {resumeData.skills.map((skill, index) => (
                 <View key={index} style={{ flexDirection: 'row', gap: 5 }}>
-                  <Text style={minimal.skillCategory}>{skillGroup.category}:</Text>
-                  <Text style={[minimal.p, { flex: 1 }]}>{skillGroup.skills}</Text>
+                  {skill.skillType === 'individual' ? (
+                    <Text style={[minimal.skillCategory, { flex: 1 }]}>{skill.skill}</Text>
+                  ) : (
+                    <>
+                      <Text style={minimal.skillCategory}>{skill.category}:</Text>
+                      <Text style={[minimal.p, { flex: 1 }]}>{skill.skills}</Text>
+                    </>
+                  )}
                 </View>
               ))}
             </View>
@@ -672,10 +680,16 @@ const ModernTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
             <Text style={modern.border}> </Text>
           </View>
           <View style={{ flexDirection: 'column', gap: 5 }}>
-            {resumeData.skills.map((skillGroup, index) => (
-              <View key={index} style={{ flexDirection: 'row' }}>
-                <Text style={modern.skillCategory}>{skillGroup.category}:</Text>
-                <Text style={[modern.p, { flex: 1 }]}>{skillGroup.skills}</Text>
+            {resumeData.skills.map((skill, index) => (
+              <View key={index} style={{ flexDirection: 'row', gap: 5 }}>
+                {skill.skillType === 'individual' ? (
+                  <Text style={[modern.skillCategory, { flex: 1 }]}>{skill.skill}</Text>
+                ) : (
+                  <>
+                    <Text style={modern.skillCategory}>{skill.category}:</Text>
+                    <Text style={[modern.p, { flex: 1 }]}>{skill.skills}</Text>
+                  </>
+                )}
               </View>
             ))}
           </View>
@@ -830,10 +844,16 @@ const ProfessionalTemplate = ({ resumeData }: { resumeData: ResumeData }) => (
         <View style={professional.section} wrap={false}>
           <Text style={professional.sectionTitle}>Technical Skills</Text>
           <View style={{ flexDirection: 'column', gap: 5 }}>
-            {resumeData.skills.map((skillGroup, index) => (
+            {resumeData.skills.map((skill, index) => (
               <View key={index} style={{ flexDirection: 'row', gap: 5 }}>
-                <Text style={professional.skillCategory}>{skillGroup.category}:</Text>
-                <Text style={[professional.p, { flex: 1 }]}>{skillGroup.skills}</Text>
+                {skill.skillType === 'individual' ? (
+                  <Text style={[professional.skillCategory, { flex: 1 }]}>{skill.skill}</Text>
+                ) : (
+                  <>
+                    <Text style={professional.skillCategory}>{skill.category}:</Text>
+                    <Text style={[professional.p, { flex: 1 }]}>{skill.skills}</Text>
+                  </>
+                )}
               </View>
             ))}
           </View>

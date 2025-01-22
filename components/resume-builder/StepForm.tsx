@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { FieldErrors, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { doc, increment, setDoc, updateDoc } from 'firebase/firestore';
@@ -12,8 +12,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { FormValues } from './types';
 import { steps } from './schema';
 import { NavigationButtons } from './components/NavigationButtons';
-import { CareerObjectiveStep } from './form-steps/CareerObjectiveStep';
-import { JobTitleStep } from './form-steps/JobTitleStep';
+
 import { 
   PersonalInfoStep, 
   WorkExperienceStep, 
@@ -21,7 +20,9 @@ import {
   SkillsStep, 
   ProjectsStep, 
   LanguagesStep, 
-  CertificationsStep
+  CertificationsStep,
+  CareerObjectiveStep,
+  JobTitleStep
 } from './form-steps';
 import { useRouter } from 'next/navigation';
 
@@ -47,6 +48,7 @@ const saveFormDataToLocalStorage = (data: Partial<FormValues>, currentStep: numb
     console.error('Error saving form data to localStorage:', error);
   }
 };
+
 
 const getFormDataFromLocalStorage = (): LocalStorageData | null => {
   try {
@@ -113,6 +115,7 @@ export default function StepForm() {
         description: ""
       }],
       skills: [{
+        skillType: "group",
         category: "",
         skills: ""
       }],
@@ -163,7 +166,10 @@ export default function StepForm() {
   }, [watch, step, isInitialLoad, getValues]);
 
   const onSubmit = async () => {
+    console.log("submit running, step:", step);
     if (step < steps.length - 1) {
+      const currentErrors = errors; 
+      console.log(currentErrors);
       setStep(step + 1);
       return;
     }
@@ -221,6 +227,11 @@ export default function StepForm() {
     }
   };
 
+  const onInvalid = (errors: FieldErrors<FormValues>) => {
+    console.log("Invalid submission:", errors); 
+    toast({ title: "Validation Error", description: "Please check the fields and try again.", variant: "destructive", duration: 5000, });
+  };
+
   const { fields: workExperienceFields, append: appendWorkExperience, remove: removeWorkExperience } = useFieldArray({
     control,
     name: 'workExperience'
@@ -275,9 +286,9 @@ export default function StepForm() {
       case 0:
         return <PersonalInfoStep {...commonProps} />;
       case 1:
-        return <CareerObjectiveStep {...commonProps} />;
-      case 2:
         return <JobTitleStep {...commonProps} />;
+      case 2:
+        return <CareerObjectiveStep {...commonProps} />;
       case 3:
         return <WorkExperienceStep {...commonProps} fields={workExperienceFields} append={appendWorkExperience} remove={removeWorkExperience}/>;
       case 4:
@@ -303,11 +314,11 @@ export default function StepForm() {
       <div className="max-w-3xl mx-auto">
         {/* Progress bar with step headings */}
         <div className="mb-8 max-md:hidden">
-          <div className="flex justify-between items-center mb-4 ">
+          <div className="flex justify-between items-center mb-4">
             {steps.map((stepInfo, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center w-full ${
+                className={`flex flex-col items-center justify-between w-full ${
                   index !== steps.length - 1 ? "pr-2" : ""
                 }`}
               >
@@ -325,9 +336,9 @@ export default function StepForm() {
                 </div>
                 {/* Step title */}
                 <p
-                  className={`text-xs mt-2 ${
+                  className={`text-xs text-center mt-2 ${
                     index === step
-                      ? "text-primary font-semibold text-center"
+                      ? "text-primary font-semibold"
                       : "text-accent-foreground"
                   }`}
                 >
@@ -361,7 +372,7 @@ export default function StepForm() {
         <Card className="p-6">
           <h1 className="text-3xl font-bold mb-6">{steps[step].title}</h1>
           
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-8">
             {renderStep()}
             
             <NavigationButtons

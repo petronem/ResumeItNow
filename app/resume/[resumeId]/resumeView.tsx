@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Edit, Save, X } from 'lucide-react';
+import { Download, Edit, Loader2, Save, X } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { ResumeData } from './types';
@@ -38,9 +38,10 @@ export default function ResumeView({
   resumeData: ResumeData;
   resumeId: string;
 }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [resumeData, setResumeData] = useState(initialResumeData);
-  const [isSaving, setIsSaving] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateKey>('modern');
   const { data: session } = useSession();
 
@@ -52,7 +53,7 @@ export default function ResumeView({
   }, []);
 
  const handleDownload = async () => {
-    
+    setIsDownloading(true);
     try {
       // Show loading toast
       toast({
@@ -72,6 +73,7 @@ export default function ResumeView({
       );
   
       if (!response.ok) {
+        setIsDownloading(false);
         throw new Error('Failed to generate PDF');
       }
   
@@ -95,6 +97,7 @@ export default function ResumeView({
       window.URL.revokeObjectURL(url);
   
       // Show success message
+      setIsDownloading(false);
       toast({
         title: "Success",
         description: "PDF downloaded successfully!",
@@ -226,9 +229,19 @@ export default function ResumeView({
                 variant="outline"
                 onClick={() => handleDownload()}
                 className="w-full sm:w-auto flex items-center justify-center gap-2"
+                disabled={isDownloading}
               >
+              {isDownloading ? 
+              <>
+                <Loader2 className='h-2 w-2 mr-2 animate-spin'/>
+                Downloading...
+              </>
+              : 
+              <>
                 <Download className="h-4 w-4" />
                 Download PDF
+              </>
+              }
               </Button>
             </div>
 
@@ -272,14 +285,12 @@ export default function ResumeView({
         </CardContent>
       </Card>
 
-      <div className='flex justify-self-center max-w-[21cm] bg-white shadow-lg pt-8 print:shadow-none'>
-        <div id="resume-content">
-          <TemplateComponent 
-            resumeData={resumeData}
-            isEditing={isEditing}
-            updateField={updateField}
-            />
-        </div>
+      <div className='flex justify-self-center max-w-[21cm] w-full bg-white shadow-lg pt-8 print:shadow-none' id='resume-content'>
+        <TemplateComponent 
+          resumeData={resumeData}
+          isEditing={isEditing}
+          updateField={updateField}
+          />
       </div>
 
       {/* Print Styles */}

@@ -25,9 +25,11 @@ export interface PersonalDetails {
     description: string;
   }
   
-  export interface Skill {
+  interface Skill {
+    skillType?: "group" | "individual";
     category: string;
     skills: string;
+    skill: string;
   }
   
   export interface Project {

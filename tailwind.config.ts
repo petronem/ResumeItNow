@@ -9,6 +9,13 @@ const config: Config = {
 	"./node_modules/@mdxeditor/editor/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+	fontFamily: {
+		sans: ['Helvetica', 'Arial', 'sans-serif'],
+		serif: ['Tinos', 'Times New Roman', 'serif'],
+		body: ['Open Sans', 'Roboto', 'sans-serif'],
+		modern: ['Raleway', 'serif'],
+		mono: ['Courier New', 'monospace'],
+	},
   	extend: {
   		colors: {
   			background: 'hsl(var(--background))',

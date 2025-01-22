@@ -33,8 +33,10 @@ interface Education {
 }
 
 interface Skill {
+  skillType?: "group" | "individual";
   category: string;
   skills: string;
+  skill: string;
 }
 
 interface Project {

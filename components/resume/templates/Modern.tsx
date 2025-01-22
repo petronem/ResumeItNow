@@ -96,7 +96,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
   };
 
   return (
-    <div className="max-w-[21cm] mx-auto bg-white px-8 pt-0">
+    <div className="w-full mx-auto bg-white px-8 pt-0">
       {/* Personal Details Section */}
       <div className="mb-8">
         <div className="flex items-center space-x-2">
@@ -316,7 +316,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                     onChange: (value) => updateField('education', index, 'startDate', value),
                     ariaLabel: "Start date"
                   })}
-                  <span>-</span>
+                  {edu.startDate && <span>-</span>}
                   {renderInput({
                     value: edu.endDate,
                     onChange: (value) => updateField('education', index, 'endDate', value),
@@ -349,25 +349,38 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
       {hasContent(resumeData.skills) && (
         <div className="mb-6 text-cyan-700">
           <div className="flex items-center gap-2 text-nowrap text-lg font-semibold mb-3 pb-1">
-            <h2>Technical Skills</h2>
+            <h2>Skills</h2>
             <div className="w-full h-1 mt-1 bg-cyan-700"></div>
           </div>
           <div className="space-y-2">
-            {resumeData.skills.map((categoryGroup, index) => (
+            {resumeData.skills.map((skill, index) => (
               <div key={index} className="flex items-start">
-                {renderInput({
-                  value: categoryGroup.category,
-                  onChange: (value) => updateField('skills', index, 'category', value),
-                  className: "text-cyan-800 text-sm font-semibold",
-                  ariaLabel: "Skill category"
-                })}
-                <span className="text-gray-800 text-sm font-semibold mx-2">:</span>
-                {renderInput({
-                  value: categoryGroup.skills,
-                  onChange: (value) => updateField('skills', index, 'skills', value),
-                  className: "text-gray-700 text-sm",
-                  ariaLabel: "Skills"
-                })}
+                {skill.skillType === 'individual' ? (
+                  <>
+                    {renderInput({
+                      value: skill.skill,
+                      onChange: (value) => updateField('skills', index, 'skill', value),
+                      className: "text-cyan-800 text-sm font-semibold",
+                      ariaLabel: "Skill"
+                    })}
+                  </>
+                ) : (
+                  <>
+                    {renderInput({
+                      value: skill.category,
+                      onChange: (value) => updateField('skills', index, 'category', value),
+                      className: "text-cyan-800 text-sm font-semibold",
+                      ariaLabel: "Skill category"
+                    })}
+                    <span className="text-cyan-800 text-sm font-semibold mx-2">:</span>
+                    {renderInput({
+                      value: skill.skills,
+                      onChange: (value) => updateField('skills', index, 'skills', value),
+                      className: "text-cyan-700 text-sm",
+                      ariaLabel: "Skills"
+                    })}
+                  </>
+                )}
               </div>
             ))}
           </div>

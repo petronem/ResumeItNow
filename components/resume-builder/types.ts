@@ -14,20 +14,22 @@ export type FormValues = {
       companyName: string;
       location?: string;
       startDate: string;
-      endDate?: string;
+      endDate: string;
       description?: string;
     }[];
     education: {
       degree: string;
       institution: string;
       location?: string;
-      startDate: string;
-      endDate?: string;
+      startDate?: string;
+      endDate: string;
       description?: string;
     }[];
     skills: {
-      category: string;
-      skills: string;
+      skillType?: "group" | "individual"; 
+      category?: string;
+      skills?: string; 
+      skill?: string;
     }[];
     projects: {
       projectName: string;
