@@ -8,15 +8,17 @@ export async function GET() {
 
   try {
     if (process.env.NODE_ENV === 'development') {
+      // Use local Puppeteer in development
       browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         headless: true,
       });
     } else {
+      // Use @sparticuz/chromium in production
       browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
+        executablePath: await chromium.executablePath(), // Ensure this is correctly set
         headless: chromium.headless,
       });
     }
