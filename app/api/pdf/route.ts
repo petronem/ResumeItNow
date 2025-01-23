@@ -44,8 +44,8 @@ export async function GET(request: NextRequest) {
             margin: {
                 top: '20px',
                 right: '10px',
-                bottom: '10px',
-                left: '20px'
+                bottom: '20px',
+                left: '10px'
             }
         });
 

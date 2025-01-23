@@ -10,10 +10,6 @@ const config: Config = {
   ],
   theme: {
   	extend: {
-		fontFamily: {
-			sans: ['Roboto', 'sans-serif'],
-			cursive: ['Playwrite', 'serif']
-		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

@@ -235,12 +235,30 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
                 </div>
               </div>
               <div className="flex flex-col">
-                {renderInput({
-                  value: experience.companyName,
-                  onChange: (value) => updateField('workExperience', index, 'companyName', value),
-                  className: "text-black font-medium text-sm mb-1",
-                  ariaLabel: "Company name"
-                })}
+                {experience.location ? <div className="flex mb-1 items-center">
+                  {renderInput({
+                    value: experience.companyName,
+                    onChange: (value) => updateField('workExperience', index, 'companyName', value),
+                    className: "text-black font-medium text-sm",
+                    ariaLabel: "Company name"
+                  })}
+                  <span className='ml-[2px] mr-1'>,</span>
+                  {renderInput({
+                    value: experience.location,
+                    onChange: (value) => updateField('workExperience', index, 'location', value),
+                    className: "text-gray-700 text-xs",
+                    ariaLabel: "Location"
+                  })}
+                </div> : 
+                <>
+                  {renderInput({
+                    value: experience.companyName,
+                    onChange: (value) => updateField('workExperience', index, 'companyName', value),
+                    className: "text-black font-medium text-sm mb-1",
+                    ariaLabel: "Company name"
+                  })}
+                </>
+                }
                 {renderInput({
                   value: experience.description,
                   onChange: (value) => updateField('workExperience', index, 'description', value),

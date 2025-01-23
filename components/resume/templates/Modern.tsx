@@ -237,12 +237,30 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                 </div>
               </div>
               <div className="flex flex-col">
+                {experience.location ? <div className="flex mb-1 items-center">
+                  {renderInput({
+                    value: experience.companyName,
+                    onChange: (value) => updateField('workExperience', index, 'companyName', value),
+                    className: "text-cyan-700 font-medium text-sm",
+                    ariaLabel: "Company name"
+                  })}
+                  <span className='ml-[2px] mr-1'>,</span>
+                  {renderInput({
+                    value: experience.location,
+                    onChange: (value) => updateField('workExperience', index, 'location', value),
+                    className: "text-cyan-900 text-xs mt-[2px]",
+                    ariaLabel: "Location"
+                  })}
+                </div> :
+                <>
                 {renderInput({
-                  value: experience.companyName,
-                  onChange: (value) => updateField('workExperience', index, 'companyName', value),
-                  className: "text-cyan-700 font-medium text-sm mb-1",
-                  ariaLabel: "Company name"
-                })}
+                    value: experience.companyName,
+                    onChange: (value) => updateField('workExperience', index, 'companyName', value),
+                    className: "text-cyan-700 font-medium text-sm mb-1",
+                    ariaLabel: "Company name"
+                  })}
+                </>
+                }
                 {renderInput({
                   value: experience.description,
                   onChange: (value) => updateField('workExperience', index, 'description', value),
