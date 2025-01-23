@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { ThemeWrapper } from '@/components/ThemeWrapper';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '@/components/SessionProvider';
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -110,6 +111,7 @@ export default async function RootLayout({
             {children}
           </ThemeWrapper>
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   )

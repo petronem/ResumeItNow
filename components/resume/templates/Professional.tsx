@@ -1,7 +1,12 @@
 import { Input } from '@/components/ui/input';
 import type { TemplateProps } from './types';
 import { Textarea } from '@/components/ui/textarea';
+import { Domine } from 'next/font/google';
 
+const tinos = Domine({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 export function ProfessionalTemplate({ resumeData, isEditing, updateField }: TemplateProps) {
   const renderMarkdown = (text: string): string => {
@@ -96,7 +101,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
   };
 
   return (
-    <div className="w-full mx-auto bg-white px-8">
+    <div className={`w-full mx-auto bg-white px-8 ${tinos.className} `}>
       {/* Personal Details Section */}
       <div className="mb-8 break-inside-avoid">
         <div className="flex justify-between w-full">
@@ -427,7 +432,7 @@ export function ProfessionalTemplate({ resumeData, isEditing, updateField }: Tem
           </div>
           <div className="flex flex-col space-y-2">
             {resumeData.languages.map((language, index) => (
-              <div key={index} className="text-sm flex items-center gap-2 p-2 rounded-md">
+              <div key={index} className="text-sm flex items-center gap-2 p-1 rounded-md">
                 {renderInput({
                   value: language.language,
                   onChange: (value) => updateField('languages', index, 'language', value),

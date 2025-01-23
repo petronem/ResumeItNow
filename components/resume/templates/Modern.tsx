@@ -1,7 +1,12 @@
 import { Input } from '@/components/ui/input';
 import type { TemplateProps } from './types';
 import { Textarea } from '@/components/ui/textarea';
+import { Montserrat } from 'next/font/google';
 
+const raleway = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateProps) {
   const renderMarkdown = (text: string): string => {
@@ -96,7 +101,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
   };
 
   return (
-    <div className="w-full mx-auto bg-white px-8 pt-0">
+    <div className={`w-full mx-auto bg-white px-8 pt-0 ${raleway.className}`}>
       {/* Personal Details Section */}
       <div className="mb-8 break-inside-avoid">
         <div className="flex items-center space-x-2">
@@ -376,7 +381,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                     {renderInput({
                       value: skill.skills,
                       onChange: (value) => updateField('skills', index, 'skills', value),
-                      className: "text-cyan-700 text-sm",
+                      className: "text-gray-700 text-sm",
                       ariaLabel: "Skills"
                     })}
                   </>
@@ -434,7 +439,7 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
           </div>
           <div className="flex flex-col">
             {resumeData.languages.map((language, index) => (
-              <div key={index} className="text-sm flex items-center gap-2 text-nowrap p-2 rounded-md">
+              <div key={index} className="text-sm flex items-center gap-2 p-1 text-nowrap rounded-md">
                 {renderInput({
                   value: language.language,
                   onChange: (value) => updateField('languages', index, 'language', value),

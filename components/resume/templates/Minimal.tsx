@@ -1,7 +1,12 @@
 import { Input } from '@/components/ui/input';
 import type { TemplateProps } from './types';
 import { Textarea } from '@/components/ui/textarea';
+import { DM_Sans } from 'next/font/google';
 
+const dm_sans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 export function MinimalTemplate({ resumeData, isEditing, updateField }: TemplateProps) {
   const renderMarkdown = (text: string): string => {
@@ -102,7 +107,7 @@ export function MinimalTemplate({ resumeData, isEditing, updateField }: Template
   };
 
   return (
-    <div className="w-full mx-auto bg-white px-8">
+    <div className={`w-full mx-auto bg-white px-8 ${dm_sans.className} `}>
       {/* Personal Details Section */}
       <div className="mb-8 break-inside-avoid">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
