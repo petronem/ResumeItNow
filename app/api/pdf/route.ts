@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     try {
         // THE CORE LOGIC
         let browser: Browser | BrowserCore;
-        if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+        // if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
             const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar')
             browser = await puppeteerCore.launch({
                 executablePath,
@@ -26,15 +26,15 @@ export async function GET(request: NextRequest) {
                 headless: chromium.headless,
                 defaultViewport: chromium.defaultViewport
             });
-        } else {
-            browser = await puppeteer.launch({
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
-            });
-        }
+        // } else {
+        //     browser = await puppeteer.launch({
+        //         headless: true,
+        //         args: ['--no-sandbox', '--disable-setuid-sandbox']
+        //     });
+        // }
 
         const page = await browser.newPage();
-        const url = `${process.env.BASE_URL}/resume/download?data=${encodeURIComponent(data)}&template=${template}`;
+        const url = `https://resumeitnow.vercel.app/resume/download?data=${encodeURIComponent(data)}&template=${template}`;
         
         await page.goto(url, { waitUntil: 'networkidle0' });
 
