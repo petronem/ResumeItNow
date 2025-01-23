@@ -71,7 +71,7 @@ export default function ResumeView({
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'resume.pdf';
+      a.download = `${resumeData.personalDetails.fullName}'s Resume - Made Using ResumeItNow.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
       setIsDownloading(false);
