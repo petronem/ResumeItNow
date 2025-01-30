@@ -8,7 +8,7 @@
 
 [Demo](https://resumeitnow.vercel.app) · [Report Bug](https://github.com/maheshpaulj/ResumeItNow/issues) · [Request Feature](https://github.com/maheshpaulj/ResumeItNow/issues)
 
-![ResumeItNow Preview](https://i.imgur.com/F0iOLCB.jpeg)
+![ResumeItNow Preview](/public/assets/ss.png)
 
 </div>
 
