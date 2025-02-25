@@ -347,12 +347,20 @@ export function ModernTemplate({ resumeData, isEditing, updateField }: TemplateP
                   })}
                 </div>
               </div>
-              {renderInput({
-                value: edu.institution,
-                onChange: (value) => updateField('education', index, 'institution', value),
-                className: "text-cyan-700 font-medium text-sm",
-                ariaLabel: "Institution"
-              })}
+              <div className="flex items-center">
+                {renderInput({
+                  value: edu.institution + " -",
+                  onChange: (value) => updateField('education', index, 'institution', value),
+                  className: "text-cyan-700 font-medium text-sm",
+                  ariaLabel: "Institution"
+                })}
+                {renderInput({
+                  value: edu.location,
+                  onChange: (value) => updateField('education', index, 'location', value),
+                  className: "text-cyan-900 font-light text-xs align-bottom ml-1",
+                  ariaLabel: "Location"
+                })}
+              </div>
               {edu.description && (
                 <div className="text-gray-600 text-sm">
                   {renderInput({
