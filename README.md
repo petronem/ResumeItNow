@@ -45,6 +45,15 @@ We love contributions! There are many ways you can help improve ResumeItNow:
    ```
    <SelectItem value="template_name">Template Name</SelectItem>
    ```
+5. Add the template like this
+   ```
+   const TEMPLATES = {
+     modern: ModernTemplate,
+     minimal: MinimalTemplate,
+     professional: ProfessionalTemplate,
+     newTemplate: NewTemplateImportName,
+   } as const;
+   ```
 6. Submit a pull request
 
 ### Template Guidelines
