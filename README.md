@@ -39,11 +39,20 @@ We love contributions! There are many ways you can help improve ResumeItNow:
 ### Adding New Resume Templates
 
 1. Create a new template in the `components/resume/templates` directory
-2. I would reccomend you to duplicate existing template and work over it.
+2. I would recommend you to duplicate existing template and work over it.
 3. Add preview image in `public/assets/`
 4. Add template selection in `app/resume/[resumeId]/resumeView.tsx`
    ```
    <SelectItem value="template_name">Template Name</SelectItem>
+   ```
+5. Add the template like this
+   ```
+   const TEMPLATES = {
+     modern: ModernTemplate,
+     minimal: MinimalTemplate,
+     professional: ProfessionalTemplate,
+     newTemplate: NewTemplateImportName,
+   } as const;
    ```
 6. Submit a pull request
 
