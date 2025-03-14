@@ -56,6 +56,11 @@ interface Certification {
   issueDate: string;
 }
 
+interface CustomSection {
+  sectionTitle: string;
+  content: string;
+}
+
 interface ResumeData {
   personalDetails: PersonalDetails;
   objective: string;
@@ -66,6 +71,10 @@ interface ResumeData {
   projects: Project[];
   languages: Language[];
   certifications: Certification[];
+  customSections: CustomSection[];
+  accentColor?: string;
+  fontFamily?: string;
+  sectionOrder?: string[];
 }
 
 async function getResumeData(resumeId: string): Promise<ResumeData | null> {

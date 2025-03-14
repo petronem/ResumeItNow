@@ -45,4 +45,8 @@ export type FormValues = {
       issuingOrganization: string;
       issueDate: string;
     }[];
+    customSections: {
+      sectionTitle: string;
+      content: string;
+    }[];
   };

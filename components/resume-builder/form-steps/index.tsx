@@ -7,6 +7,7 @@ import { EducationStep } from "./EducationStep";
 import { SkillsStep } from "./SkillsStep";
 import { CertificationsStep } from "./CertificationStep";
 import { LanguagesStep } from "./LanguageStep";
+import { CustomSectionsStep } from "./CustomSectionsStep";
 
 
-export {PersonalInfoStep, CareerObjectiveStep, JobTitleStep, WorkExperienceStep, ProjectsStep, EducationStep, SkillsStep, CertificationsStep, LanguagesStep};
+export {PersonalInfoStep, CareerObjectiveStep, JobTitleStep, WorkExperienceStep, ProjectsStep, EducationStep, SkillsStep, CertificationsStep, LanguagesStep, CustomSectionsStep};

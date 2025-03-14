@@ -48,6 +48,11 @@ export interface PersonalDetails {
     issuingOrganization: string;
     issueDate: string;
   }
+
+  export interface CustomSection {
+    sectionTitle: string;
+    content: string;
+  }
   
   export interface ResumeData {
     personalDetails: PersonalDetails;
@@ -59,6 +64,10 @@ export interface PersonalDetails {
     projects: Project[];
     languages: Language[];
     certifications: Certification[];
+    customSections: CustomSection[];
+    accentColor?: string;
+    fontFamily?: string;
+    sectionOrder?: string[];
   }
 
 export interface EditableTextProps {

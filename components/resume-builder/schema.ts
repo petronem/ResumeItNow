@@ -78,6 +78,13 @@ export const jobTitleSchema = z.object({
     }))
   });
 
+  export const customSectionSchema = z.object({
+    customSections: z.array(z.object({
+      sectionTitle: z.string().min(1, "Section title is required"),
+      content: z.string().max(2000, "Content must be less than 2000 characters").optional(),
+    }))
+  });
+
   export const steps = [
     { schema: personalInfoSchema, title: "Personal Info" },
     { schema: jobTitleSchema, title: "Job Title" },
@@ -88,6 +95,7 @@ export const jobTitleSchema = z.object({
     { schema: skillsSchema, title: "Skills" },
     { schema: languagesSchema, title: "Languages" },
     { schema: certificationsSchema, title: "Certifications" },
+    { schema: customSectionSchema, title: "Custom Sections" },
   ];
 
   // Utility function to save schema to localStorage

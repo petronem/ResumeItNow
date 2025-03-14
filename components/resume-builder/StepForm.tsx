@@ -22,7 +22,8 @@ import {
   LanguagesStep, 
   CertificationsStep,
   CareerObjectiveStep,
-  JobTitleStep
+  JobTitleStep,
+  CustomSectionsStep
 } from './form-steps';
 import { useRouter } from 'next/navigation';
 
@@ -261,6 +262,10 @@ export default function StepForm() {
     control,
     name: 'certifications'
   });
+  const { fields: customSectionFields, append: appendCustomSection, remove: removeCustomSection } = useFieldArray({
+    control,
+    name: 'customSections'
+  });
 
   const handlePrevious = () => {
     if (step > 0) {
@@ -301,6 +306,8 @@ export default function StepForm() {
         return <LanguagesStep {...commonProps} fields={languageFields} append={appendLanguage} remove={removeLanguage}/>;
       case 8:
         return <CertificationsStep {...commonProps} fields={certificationFields} append={appendCertification} remove={removeCertification}/>;
+      case 9:
+        return <CustomSectionsStep {...commonProps} fields={customSectionFields} append={appendCustomSection} remove={removeCustomSection}/>;
       default:
         return null;
     }
