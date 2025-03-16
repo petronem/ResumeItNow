@@ -58,6 +58,7 @@ export function ModernTemplate({
       type = '',
       ariaLabel = '',
       textColor = 'text-gray-600',
+      inlineStyle = {},
     }: {
       value: string;
       onChange: (value: string) => void;
@@ -66,6 +67,7 @@ export function ModernTemplate({
       type?: string;
       ariaLabel?: string;
       textColor?: string;
+      inlineStyle?: React.CSSProperties;
     }) => {
       if (!isEditing) {
         if (type === 'link') {
@@ -75,6 +77,7 @@ export function ModernTemplate({
               target="_blank"
               rel="noopener noreferrer"
               className={`hover:underline ${textColor} ${className}`}
+              style={inlineStyle}
               aria-label={ariaLabel}
             >
               {value}
@@ -86,6 +89,7 @@ export function ModernTemplate({
             <a
               href={`mailto:${value}`}
               className={`hover:underline ${textColor} ${className}`}
+              style={inlineStyle}
               aria-label={ariaLabel}
             >
               {value}
@@ -97,6 +101,7 @@ export function ModernTemplate({
             <a
               href={`tel:${value}`}
               className={`hover:underline ${textColor} ${className}`}
+              style={inlineStyle}
               aria-label={ariaLabel}
             >
               {value}
@@ -106,6 +111,7 @@ export function ModernTemplate({
         return (
           <div
             className={`${textColor} ${className}`}
+            style={inlineStyle}
             dangerouslySetInnerHTML={{ __html: renderMarkdown(value) }}
           />
         );
@@ -117,6 +123,7 @@ export function ModernTemplate({
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
             className={`w-full min-h-[60px] ${textColor} ${className}`}
+            style={inlineStyle}
             aria-label={ariaLabel}
           />
         );
@@ -128,6 +135,7 @@ export function ModernTemplate({
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
           className={`focus-visible:ring-2 ${textColor} ${className}`}
+          style={inlineStyle}
           aria-label={ariaLabel}
         />
       );
@@ -154,7 +162,7 @@ export function ModernTemplate({
   };
 
   return (
-    <div className={`w-full mx-auto bg-white px-8 pt-0`} style={{ fontFamily }}>
+    <div className={`w-full mx-auto bg-white px-6 py-4`} style={{ fontFamily }}>
       {/* Personal Details Section */}
       <div className="mb-8 break-inside-avoid">
         <div className="flex items-center space-x-2">
@@ -163,7 +171,7 @@ export function ModernTemplate({
               value: resumeData.personalDetails.fullName,
               onChange: (value) => updateField('personalDetails', null, 'fullName', value),
               className: 'text-left',
-              textColor: `text-[${colors.sectionTitle}]`,
+              inlineStyle: { color: colors.sectionTitle },
               ariaLabel: 'Full name',
             })}
           </h1>
@@ -172,7 +180,7 @@ export function ModernTemplate({
               value: resumeData.jobTitle,
               onChange: (value) => updateField('jobTitle', null, 'jobTitle', value),
               className: 'text-left',
-              textColor: `text-[${colors.subheading}]`,
+              inlineStyle: { color: colors.subheading },
               ariaLabel: 'Job Title',
             })}
           </p>
@@ -186,7 +194,7 @@ export function ModernTemplate({
                 onChange: (value) => updateField('personalDetails', null, 'email', value),
                 className: 'inline-block',
                 type: 'mail',
-                textColor: `text-[${colors.tertiary}]`,
+                inlineStyle: { color: colors.tertiary },
                 ariaLabel: 'Email address',
               })}
             </span>
@@ -199,7 +207,7 @@ export function ModernTemplate({
                 onChange: (value) => updateField('personalDetails', null, 'phone', value),
                 className: 'inline-block',
                 type: 'phone',
-                textColor: `text-[${colors.tertiary}]`,
+                inlineStyle: { color: colors.tertiary },
                 ariaLabel: 'Phone number',
               })}
             </span>
@@ -211,7 +219,7 @@ export function ModernTemplate({
                 value: resumeData.personalDetails.location,
                 onChange: (value) => updateField('personalDetails', null, 'location', value),
                 className: 'inline-block',
-                textColor: `text-[${colors.tertiary}]`,
+                inlineStyle: { color: colors.tertiary },
                 ariaLabel: 'Location',
               })}
             </span>
@@ -226,7 +234,7 @@ export function ModernTemplate({
                 onChange: (value) => updateField('personalDetails', null, 'linkedin', value),
                 className: 'inline-block text-sm',
                 type: 'link',
-                textColor: `text-[${colors.tertiary}]`,
+                inlineStyle: { color: colors.tertiary },
                 ariaLabel: 'LinkedIn profile',
               })}
             </span>
@@ -239,7 +247,7 @@ export function ModernTemplate({
                 onChange: (value) => updateField('personalDetails', null, 'github', value),
                 className: 'inline-block text-sm',
                 type: 'link',
-                textColor: `text-[${colors.tertiary}]`,
+                inlineStyle: { color: colors.tertiary },
                 ariaLabel: 'GitHub profile',
               })}
             </span>
@@ -249,9 +257,9 @@ export function ModernTemplate({
 
       {/* Render sections based on sectionOrder */}
       {sectionOrder.map((section) => (
-        <div key={section}>
+        <div key={section} className="break-inside-avoid mb-6">
           {section === 'objective' && hasContent(resumeData.objective) && (
-            <div className="mb-6 break-inside-avoid">
+            <div className="break-inside-avoid">
               <SectionHeader title="Professional Summary" />
               {renderInput({
                 value: resumeData.objective,
@@ -265,7 +273,7 @@ export function ModernTemplate({
           )}
 
           {section === 'workExperience' && hasContent(resumeData.workExperience) && (
-            <div className="mb-6 flex-1">
+            <div className="break-inside-avoid flex-1">
               <SectionHeader title="Work Experience" />
               {resumeData.workExperience.map((experience, index) => (
                 <div
@@ -273,9 +281,7 @@ export function ModernTemplate({
                   className={`pb-4 break-inside-avoid ${
                     index !== resumeData.workExperience.length - 1 ? 'mb-4 border-b border-dashed' : ''
                   }`}
-                  style={{
-                    borderColor: index !== resumeData.workExperience.length - 1 ? colors.sectionTitle : 'transparent',
-                  }}
+                  style={{ borderColor: index !== resumeData.workExperience.length - 1 ? colors.sectionTitle : 'transparent' }}
                 >
                   <div className="flex justify-between items-start mb-1">
                     <div className="flex-1">
@@ -283,7 +289,7 @@ export function ModernTemplate({
                         value: experience.jobTitle,
                         onChange: (value) => updateField('workExperience', index, 'jobTitle', value),
                         className: 'font-semibold',
-                        textColor: `text-[${colors.subheading}]`,
+                        inlineStyle: { color: colors.subheading },
                         ariaLabel: 'Job title',
                       })}
                     </div>
@@ -291,14 +297,14 @@ export function ModernTemplate({
                       {renderInput({
                         value: experience.startDate,
                         onChange: (value) => updateField('workExperience', index, 'startDate', value),
-                        textColor: `text-[${colors.tertiary}]`,
+                        inlineStyle: { color: colors.tertiary },
                         ariaLabel: 'Start date',
                       })}
                       <span>-</span>
                       {renderInput({
                         value: experience.endDate,
                         onChange: (value) => updateField('workExperience', index, 'endDate', value),
-                        textColor: `text-[${colors.tertiary}]`,
+                        inlineStyle: { color: colors.tertiary },
                         ariaLabel: 'End date',
                       })}
                     </div>
@@ -307,22 +313,24 @@ export function ModernTemplate({
                     {experience.location ? (
                       <div className="flex items-center gap-1 mb-1">
                         <Building2 className="w-4 h-4" style={{ color: colors.tertiary }} />
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-1">
                           {renderInput({
                             value: experience.companyName,
                             onChange: (value) => updateField('workExperience', index, 'companyName', value),
                             className: 'font-medium text-sm',
-                            textColor: `text-[${colors.subheading}]`,
+                            inlineStyle: { color: colors.subheading },
                             ariaLabel: 'Company name',
                           })}
-                          <span className="ml-1 mr-1">,</span>
-                          {renderInput({
-                            value: experience.location,
-                            onChange: (value) => updateField('workExperience', index, 'location', value),
-                            className: 'text-xs',
-                            textColor: `text-[${colors.tertiary}]`,
-                            ariaLabel: 'Location',
-                          })}
+                          <div className="flex items-center">
+                            <MapPin className="w-4 h-4" style={{ color: colors.tertiary }} />
+                            {renderInput({
+                              value: experience.location,
+                              onChange: (value) => updateField('workExperience', index, 'location', value),
+                              className: 'text-xs',
+                              inlineStyle: { color: colors.tertiary },
+                              ariaLabel: 'Location',
+                            })}
+                          </div>
                         </div>
                       </div>
                     ) : (
@@ -332,7 +340,7 @@ export function ModernTemplate({
                           value: experience.companyName,
                           onChange: (value) => updateField('workExperience', index, 'companyName', value),
                           className: 'font-medium text-sm',
-                          textColor: `text-[${colors.subheading}]`,
+                          inlineStyle: { color: colors.subheading },
                           ariaLabel: 'Company name',
                         })}
                       </div>
@@ -352,7 +360,7 @@ export function ModernTemplate({
           )}
 
           {section === 'projects' && hasContent(resumeData.projects) && (
-            <div className="mb-6">
+            <div className="break-inside-avoid">
               <SectionHeader title="Projects" />
               {resumeData.projects.map((project, index) => (
                 <div
@@ -360,16 +368,14 @@ export function ModernTemplate({
                   className={`pb-4 break-inside-avoid ${
                     index !== resumeData.projects.length - 1 ? 'mb-4 border-b border-dashed' : ''
                   }`}
-                  style={{
-                    borderColor: index !== resumeData.projects.length - 1 ? colors.sectionTitle : 'transparent',
-                  }}
+                  style={{ borderColor: index !== resumeData.projects.length - 1 ? colors.sectionTitle : 'transparent' }}
                 >
                   <div className="flex flex-col items-start mb-1">
                     {renderInput({
                       value: project.projectName,
                       onChange: (value) => updateField('projects', index, 'projectName', value),
                       className: 'font-semibold',
-                      textColor: `text-[${colors.subheading}]`,
+                      inlineStyle: { color: colors.subheading },
                       ariaLabel: 'Project name',
                     })}
                     {project.link && (
@@ -380,7 +386,7 @@ export function ModernTemplate({
                           onChange: (value) => updateField('projects', index, 'link', value),
                           className: 'text-sm italic',
                           type: 'link',
-                          textColor: `text-[${colors.tertiary}]`,
+                          inlineStyle: { color: colors.tertiary },
                           ariaLabel: 'Project link',
                         })}
                       </div>
@@ -400,55 +406,55 @@ export function ModernTemplate({
           )}
 
           {section === 'education' && hasContent(resumeData.education) && (
-            <div className="mb-6 break-inside-avoid">
+            <div className="break-inside-avoid">
               <SectionHeader title="Education" />
               {resumeData.education.map((edu, index) => (
-                <div key={index} className="mb-4 last:mb-0">
+                <div key={index} className="mb-4 last:mb-0 break-inside-avoid">
                   <div className="flex justify-between items-start">
                     {renderInput({
                       value: edu.degree,
                       onChange: (value) => updateField('education', index, 'degree', value),
                       className: 'font-semibold',
-                      textColor: `text-[${colors.subheading}]`,
+                      inlineStyle: { color: colors.subheading },
                       ariaLabel: 'Degree',
                     })}
                     <div className="text-sm flex items-center gap-1" style={{ color: colors.tertiary }}>
                       {renderInput({
                         value: edu.startDate,
                         onChange: (value) => updateField('education', index, 'startDate', value),
-                        textColor: `text-[${colors.tertiary}]`,
+                        inlineStyle: { color: colors.tertiary },
                         ariaLabel: 'Start date',
                       })}
                       {edu.startDate && <span>-</span>}
                       {renderInput({
                         value: edu.endDate,
                         onChange: (value) => updateField('education', index, 'endDate', value),
-                        textColor: `text-[${colors.tertiary}]`,
+                        inlineStyle: { color: colors.tertiary },
                         ariaLabel: 'End date',
                       })}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
                     <School className="w-4 h-4" style={{ color: colors.tertiary }} />
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-1">
                       {renderInput({
                         value: edu.institution,
                         onChange: (value) => updateField('education', index, 'institution', value),
                         className: 'font-medium text-sm',
-                        textColor: `text-[${colors.subheading}]`,
+                        inlineStyle: { color: colors.subheading },
                         ariaLabel: 'Institution',
                       })}
                       {edu.location && (
-                        <>
-                          <span className="mx-1">-</span>
+                        <div className="flex items-center">
+                          <MapPin className="w-4 h-4" style={{ color: colors.tertiary }} />
                           {renderInput({
                             value: edu.location,
                             onChange: (value) => updateField('education', index, 'location', value),
                             className: 'font-light text-xs',
-                            textColor: `text-[${colors.tertiary}]`,
+                            inlineStyle: { color: colors.tertiary },
                             ariaLabel: 'Location',
                           })}
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -469,7 +475,7 @@ export function ModernTemplate({
           )}
 
           {section === 'skills' && hasContent(resumeData.skills) && (
-            <div className="mb-6">
+            <div className="break-inside-avoid">
               <SectionHeader title="Skills" />
               <div className="space-y-2">
                 {resumeData.skills.map((skill, index) => (
@@ -479,7 +485,7 @@ export function ModernTemplate({
                         value: skill.skill,
                         onChange: (value) => updateField('skills', index, 'skill', value),
                         className: 'text-sm font-semibold',
-                        textColor: `text-[${colors.subheading}]`,
+                        inlineStyle: { color: colors.subheading },
                         ariaLabel: 'Skill',
                       })
                     ) : (
@@ -488,7 +494,7 @@ export function ModernTemplate({
                           value: skill.category,
                           onChange: (value) => updateField('skills', index, 'category', value),
                           className: 'text-sm font-semibold',
-                          textColor: `text-[${colors.subheading}]`,
+                          inlineStyle: { color: colors.subheading },
                           ariaLabel: 'Skill category',
                         })}
                         <span className="mx-2 text-sm font-semibold" style={{ color: colors.subheading }}>
@@ -510,16 +516,16 @@ export function ModernTemplate({
           )}
 
           {section === 'certifications' && hasContent(resumeData.certifications) && (
-            <div className="mb-6">
+            <div className="break-inside-avoid">
               <SectionHeader title="Certifications" />
               {resumeData.certifications.map((cert, index) => (
-                <div key={index} className="mb-3 last:mb-0">
+                <div key={index} className="mb-3 last:mb-0 break-inside-avoid">
                   <div className="flex justify-between items-start">
                     {renderInput({
                       value: cert.certificationName,
                       onChange: (value) => updateField('certifications', index, 'certificationName', value),
                       className: 'font-medium text-sm',
-                      textColor: `text-[${colors.subheading}]`,
+                      inlineStyle: { color: colors.subheading },
                       ariaLabel: 'Certification name',
                     })}
                     <div className="flex items-center gap-1">
@@ -527,7 +533,7 @@ export function ModernTemplate({
                         value: cert.issueDate,
                         onChange: (value) => updateField('certifications', index, 'issueDate', value),
                         className: 'text-sm',
-                        textColor: `text-[${colors.tertiary}]`,
+                        inlineStyle: { color: colors.tertiary },
                         ariaLabel: 'Certification date',
                       })}
                     </div>
@@ -538,7 +544,7 @@ export function ModernTemplate({
                       value: cert.issuingOrganization,
                       onChange: (value) => updateField('certifications', index, 'issuingOrganization', value),
                       className: 'text-sm',
-                      textColor: `text-[${colors.tertiary}]`,
+                      inlineStyle: { color: colors.tertiary },
                       ariaLabel: 'Issuing organization',
                     })}
                   </div>
@@ -548,47 +554,28 @@ export function ModernTemplate({
           )}
 
           {section === 'languages' && hasContent(resumeData.languages) && (
-            <div className="mb-6">
+            <div className="break-inside-avoid">
               <SectionHeader title="Languages" />
               <div className="flex flex-col">
                 {resumeData.languages.map((language, index) => (
-                  <div key={index} className="text-sm flex items-center gap-2 p-1 text-nowrap rounded-md">
+                  <div key={index} className="text-sm flex items-center gap-2 p-1 text-nowrap rounded-md break-inside-avoid">
                     {renderInput({
                       value: language.language,
                       onChange: (value) => updateField('languages', index, 'language', value),
                       className: 'font-medium',
-                      textColor: `text-[${colors.subheading}]`,
+                      inlineStyle: { color: colors.subheading },
                       ariaLabel: 'Language name',
                     })}
                     <span style={{ color: colors.tertiary }}>-</span>
                     {renderInput({
                       value: language.proficiency,
                       onChange: (value) => updateField('languages', index, 'proficiency', value),
-                      textColor: `text-[${colors.tertiary}]`,
+                      inlineStyle: { color: colors.tertiary },
                       ariaLabel: 'Language proficiency',
                     })}
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {section === 'customSections' && hasContent(resumeData.customSections) && (
-            <div className="mb-6">
-              {resumeData.customSections.map((custom, idx) => (
-                <div key={idx} className="mb-4">
-                  <SectionHeader title={custom.sectionTitle} />
-                  {renderInput({
-                    value: custom.content,
-                    onChange: (value) =>
-                      updateField('customSections', idx, 'content', value),
-                    multiline: true,
-                    className: 'text-sm',
-                    textColor: 'text-gray-600',
-                    ariaLabel: `${custom.sectionTitle} content`,
-                  })}
-                </div>
-              ))}
             </div>
           )}
         </div>

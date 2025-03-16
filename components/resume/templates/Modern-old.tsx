@@ -101,7 +101,7 @@ export function OldModernTemplate({ resumeData, isEditing, updateField }: Templa
   };
 
   return (
-    <div className={`w-full mx-auto bg-white px-8 pt-0 ${raleway.className}`}>
+    <div className={`w-full mx-auto bg-white px-6 py-4 ${raleway.className}`}>
       {/* Personal Details Section */}
       <div className="mb-8 break-inside-avoid">
         <div className="flex items-center space-x-2">

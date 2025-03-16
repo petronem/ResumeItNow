@@ -55,6 +55,19 @@ const DEFAULT_SECTION_ORDER = [
   'customSections',
 ];
 
+const FONT_OPTIONS = [
+  { value: 'DM Sans', label: 'DM Sans' },
+  { value: 'Arial', label: 'Arial' },
+  { value: 'Times New Roman', label: 'Times New Roman' },
+  { value: 'Helvetica', label: 'Helvetica' },
+  { value: 'Georgia', label: 'Georgia' },
+  { value: 'Roboto', label: 'Roboto' },
+  { value: 'Lato', label: 'Lato' },
+  { value: 'Open Sans', label: 'Open Sans' },
+  { value: 'Verdana', label: 'Verdana' },
+  { value: 'Calibri', label: 'Calibri' },
+];
+
 export default function ResumeView({
   resumeData: initialResumeData,
   resumeId,
@@ -90,16 +103,21 @@ export default function ResumeView({
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-      const response = await fetch(
-        `/api/pdf?data=${encodeURIComponent(
-          JSON.stringify({ ...resumeData, accentColor, fontFamily, sectionOrder })
-        )}&template=${selectedTemplate}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const queryParams = new URLSearchParams({
+        data: JSON.stringify(resumeData),
+        template: selectedTemplate,
+        accentColor: accentColor,
+        fontFamily: fontFamily,
+        sectionOrder: JSON.stringify(sectionOrder),
+      }).toString();
+
+      const response = await fetch(`/api/pdf?${queryParams}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
       if (!response.ok) throw new Error('Failed to generate PDF');
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -107,6 +125,7 @@ export default function ResumeView({
       a.download = `${resumeData.personalDetails.fullName}'s Resume - Made Using ResumeItNow.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
+
       toast({
         title: 'Success',
         description: 'PDF downloaded successfully!',
@@ -226,7 +245,7 @@ export default function ResumeView({
     setIsReorderModalOpen(false);
   };
 
-  const debouncedSetAccentColor = useCallback(  // eslint-disable-line react-hooks/exhaustive-deps 
+  const debouncedSetAccentColor = useCallback( // eslint-disable-line react-hooks/exhaustive-deps
     debounce((color: string) => setAccentColor(color), 100),
     []
   );
@@ -240,7 +259,8 @@ export default function ResumeView({
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 py-4 px-4 sm:px-6 flex flex-col items-center">
-      <Card className="w-full max-w-[21cm] mb-4">
+      {/* Controls Card - Hidden on Print */}
+      <Card className="w-full max-w-[21cm] mb-4 print:hidden">
         <CardContent className="p-4">
           <div className="flex flex-col">
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 justify-between">
@@ -249,7 +269,7 @@ export default function ResumeView({
                   value={selectedTemplate}
                   onValueChange={(value: TemplateKey) => setSelectedTemplate(value)}
                   disabled={isEditing}
-                  >
+                >
                   <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue placeholder="Select Template" />
                   </SelectTrigger>
@@ -265,7 +285,7 @@ export default function ResumeView({
                   onClick={handleDownload}
                   className="w-full sm:w-auto flex items-center justify-center gap-2"
                   disabled={isDownloading}
-                  >
+                >
                   {isDownloading ? (
                     <>
                       <Loader2 className="h-2 w-2 mr-2 animate-spin" />
@@ -319,48 +339,48 @@ export default function ResumeView({
               </div>
             </div>
 
-            <div className="">
-              {isEditing && (
-                <div className="flex max-md:flex-col items-center justify-between w-full gap-4 border-t border-border mt-4 pt-4">
-                  <div className="flex flex-col">
-                    <label className="text-sm">Accent Color:</label>
-                    <Input
-                      type="color"
-                      value={accentColor}
-                      onChange={handleAccentColorChange}
-                      className="w-full sm:w-20"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="text-sm">Font Family:</label>
-                    <Select value={fontFamily} onValueChange={setFontFamily}>
-                      <SelectTrigger className="w-full sm:w-[180px]">
-                        <SelectValue placeholder="Select Font" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DM Sans">DM Sans</SelectItem>
-                        <SelectItem value="Arial">Arial</SelectItem>
-                        <SelectItem value="Times New Roman">Times New Roman</SelectItem>
-                        <SelectItem value="Helvetica">Helvetica</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsReorderModalOpen(true)}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2"
-                  >
-                    Rearrange Sections
-                  </Button>
+            {isEditing && (
+              <div className="flex max-md:flex-col items-center justify-between w-full gap-4 border-t border-border mt-4 pt-4">
+                <div className="flex flex-col">
+                  <label className="text-sm">Accent Color:</label>
+                  <Input
+                    type="color"
+                    value={accentColor}
+                    onChange={handleAccentColorChange}
+                    className="w-full sm:w-20"
+                  />
                 </div>
-              )}
-            </div>
+                <div className="flex flex-col">
+                  <label className="text-sm">Font Family:</label>
+                  <Select value={fontFamily} onValueChange={setFontFamily}>
+                    <SelectTrigger className="w-full sm:w-[180px]">
+                      <SelectValue placeholder="Select Font" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_OPTIONS.map((font) => (
+                        <SelectItem key={font.value} value={font.value}>
+                          <span style={{ fontFamily: font.value }}>{font.label}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsReorderModalOpen(true)}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2"
+                >
+                  Rearrange Sections
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      <div className="w-full max-w-[21cm] min-h-[29.7cm] bg-white shadow-lg pt-8 print:shadow-none">
-        <div className="w-full" id="resume-content">
+      {/* Resume Wrapper - Hidden on Print Except for #resume-content */}
+      <div className="w-full max-w-[21cm] min-h-[29.7cm] bg-white shadow-lg">
+        <div id="resume-content" className="w-full">
           <TemplateComponent
             resumeData={resumeData}
             isEditing={isEditing}
@@ -372,9 +392,9 @@ export default function ResumeView({
         </div>
       </div>
 
-      {/* Reorder Modal */}
+      {/* Reorder Modal - Hidden on Print */}
       <Dialog open={isReorderModalOpen} onOpenChange={setIsReorderModalOpen}>
-        <DialogContent>
+        <DialogContent className="print:hidden">
           <DialogHeader>
             <DialogTitle>Rearrange Sections</DialogTitle>
           </DialogHeader>
@@ -402,7 +422,6 @@ export default function ResumeView({
                             {...provided.dragHandleProps}
                             className="flex items-center space-x-2 cursor-default"
                           >
-                            {/* <GripVertical className="h-4 w-4 text-gray-500" /> */}
                             <span>{section.replace(/([A-Z])/g, ' $1').toUpperCase()}</span>
                           </div>
                           <div className="flex space-x-2">
@@ -453,12 +472,28 @@ export default function ResumeView({
             margin: 0.5cm;
             size: A4;
           }
+          // /* Hide everything except #resume-content */
+          // body > *:not(#resume-content),
+          // body > div > *:not(#resume-content),
+          nav,
+          footer {
+            display: none !important;
+          }
+          #resume-content {
+            display: block !important;
+            width: 21cm !important;
+            height: 29.7cm !important;
+            margin: 0 !important;
+            padding: 0.5cm !important;
+            background: white !important;
+            box-shadow: none !important;
+          }
           body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
-          }
-          .shadow-lg {
-            box-shadow: none !important;
           }
           a {
             text-decoration: none !important;
