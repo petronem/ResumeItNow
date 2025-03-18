@@ -143,7 +143,7 @@ export function MinimalTemplate({
 
   const SectionHeader = ({ title }: { title: string }) => (
     <div
-      className="text-lg font-semibold mb-2 pb-1 border-b-2 border-gray-800 break-inside-avoid"
+      className="text-lg text-black font-semibold mb-2 pb-1 border-b-2 border-gray-800 break-inside-avoid"
     >
       <h2>{title}</h2>
     </div>

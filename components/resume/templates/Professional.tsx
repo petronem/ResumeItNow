@@ -143,8 +143,7 @@ export function ProfessionalTemplate({
 
   const SectionHeader = ({ title }: { title: string }) => (
     <div
-      className="flex items-center gap-2 text-lg font-semibold mb-3 border-b-2 border-gray-800" // Black title, dark gray border
-      style={{ color: '#000000' }} // Explicit black for section title
+      className="flex items-center gap-2 text-lg text-black font-semibold mb-3 border-b-2 border-gray-800" // Black title, dark gray border
     >
       <h2 className="text-center w-full">{title}</h2>
     </div>
