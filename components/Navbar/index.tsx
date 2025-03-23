@@ -36,12 +36,14 @@ const navLinks: NavLink[] = [
   { title: 'Home', href: '/' },
   { title: 'About', href: '/about' },
   { title: 'Create', href: '/resume/create' },
+  { title: 'ATS Checker(beta)', href: '/ats-checker' },
 ];
 
 export default function Navbar() {
   const { data: session } = useSession();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [settings, setSettings] = useState<Settings>({
     displayName: '',
     defaultTemplate: 'modern'
@@ -63,6 +65,11 @@ export default function Navbar() {
     router.push('/');
   };
 
+  const navigateTo = (href: string) => {
+    setSheetOpen(false); // Close the sheet
+    router.push(href);
+  };
+
   const UserMenu = () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -74,10 +81,10 @@ export default function Navbar() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/profile')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => navigateTo('/profile')}>
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/settings')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => navigateTo('/settings')}>
             Settings
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -90,7 +97,7 @@ export default function Navbar() {
   );
 
   const MobileMenu = () => (
-    <Sheet>
+    <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="h-5 w-5" />
@@ -104,7 +111,7 @@ export default function Navbar() {
               key={link.href}
               variant="ghost"
               className="w-full justify-start"
-              onClick={() => router.push(link.href)}
+              onClick={() => navigateTo(link.href)}
             >
               {link.title}
             </Button>
@@ -116,7 +123,7 @@ export default function Navbar() {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => router.push('/signin')}
+                onClick={() => navigateTo('/signin')}
               >
                 Sign In
               </Button>
@@ -145,7 +152,7 @@ export default function Navbar() {
                   key={link.href}
                   variant="ghost"
                   size="sm"
-                  onClick={() => router.push(link.href)}
+                  onClick={() => navigateTo(link.href)}
                 >
                   {link.title}
                 </Button>
@@ -159,7 +166,7 @@ export default function Navbar() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => router.push('/signin')}
+                  onClick={() => navigateTo('/signin')}
                 >
                   Sign In
                 </Button>
