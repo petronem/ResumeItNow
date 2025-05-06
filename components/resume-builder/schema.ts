@@ -11,7 +11,7 @@ export const personalInfoSchema = z.object({
   })
 });
 export const careerObjectiveSchema = z.object({
-    objective: z.string().max(625, "Objective must be less than 625 characters").optional(),
+    objective: z.string().max(900, "Objective must be less than 900 characters").optional(),
   });
 
 export const jobTitleSchema = z.object({
